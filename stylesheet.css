@@ -1,0 +1,43 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    height: 100%;
+    background-color: lightslategray;
+}
+
+body{
+    height: 100%;
+    margin: 0;
+    padding: 0%;
+}
+
+.menu{
+    display: flex;
+}
+
+canvas{
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0%;
+}
+.canvas{
+    grid-column: 1/2;
+}
+
+.wrapper{
+    height: 100%;
+    display: grid;
+    grid-template-columns: (auto-fill, 186px);
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto 1fr;
+}
+
+textarea{
+    resize: none;
+    grid-column: 2/3;
+    outline: none;
+}
