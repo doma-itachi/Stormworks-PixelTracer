@@ -1,3 +1,14 @@
+class Vector2{
+    constructor(_x,_y){
+        this.x=_x;
+        this.y=_y;
+    }
+}
+
+//定数宣言
+const maxDisplaySize=new Vector2(9, 5);
+const displayPixel=16;
+
 //グローバル定義
 var loader;
 var core;
@@ -102,12 +113,25 @@ function keyPressed(){
         SetSource();
     }
 }
-function ImageSelected(file){
+function ImageSelected(file){//画像のロード
     if(file.type==="image"){
+        temp=createImg(file.data,"","",async()=>{
+            await(3000);
+            temp.hide();
+            console.log(temp.width);
+        if(temp.width%displayPixel!=0 || temp.height%displayPixel!=0){
+            if(confirm("画像サイズが16の倍数ではありません、読み込みますか？")==false)
+                return;
+        }
+        if(maxDisplaySize.x*displayPixel<temp.width || maxDisplaySize.y*displayPixel<temp.height){
+            if(confirm("画像サイズが大きすぎます、読み込みますか？")==false)
+                return;
+        }
         core=new Core();
         core.image=createImg(file.data,"");
         core.image.hide();
         SetSource();
+        });
     }
 }
 
@@ -216,6 +240,7 @@ class Position{
         this.y=0;
     }
 }
+
 class Theme{
 
 }
