@@ -16,6 +16,7 @@ body{
 
 .menu{
     display: flex;
+    margin: 6px;
 }
 
 canvas{
