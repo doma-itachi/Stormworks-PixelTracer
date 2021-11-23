@@ -10,7 +10,8 @@ const maxDisplaySize=new Vector2(9, 5);
 const displayPixel=16;
 
 //グローバル定義
-var loader;
+isMenuVisible=true;
+var storageMgr;
 var core;
 var theme;
 var mouse;
@@ -18,8 +19,7 @@ var input;
 var textAreaElement;
 
 function setup(){
-    loader=new Loader();
-    core=new Core();
+    core=new Core();//コア定義
 
     var wrapperDiv=document.getElementById("wrapper");
     textAreaElement=document.getElementById("sources");
@@ -29,6 +29,10 @@ function setup(){
 
     input=createFileInput(ImageSelected);
     input.parent("menu");
+
+    //復帰
+    storageMgr=new StorageManager();
+    if(storageMgr.exist())storageMgr.load();
 
     //イベント
     canvas.mouseWheel(zoom);
@@ -48,7 +52,7 @@ function windowResized(){
 }
 function draw(){
     background(0,0,0);
-    if(loader.isMenuVisible){
+    if(isMenuVisible){
         noSmooth();
         if(core.image!==null){
             image(core.image,width/2+core.posX,height/2+core.posY,core.image.width*core.zoom,core.image.height*core.zoom);
@@ -128,9 +132,8 @@ function ImageSelected(file){//画像のロード
                 return;
         }
         core=new Core();
-        core.image=createImg(file.data,"");
-        core.image.hide();
-        SetSource();
+        core.imageData=file.data;
+        core.loadImage();
         });
     }
 }
@@ -214,9 +217,17 @@ class Core{
         this.posX=0;
         this.posY=0;
         this.image=null;
+        this.imageData=null;
         this.zoom=1;
         this.isUseFill=true;
         this.rects=new Array();
+    }
+    loadImage(){
+        core.image=createImg(this.imageData,"");
+        core.image.hide();
+        SetSource();
+    }
+    positionClamp(){
     }
 }
 
@@ -228,10 +239,26 @@ class Rect{
         this.sy=_sy;
     }
 }
-class Loader{
-    constructor(){
-        this.isMenuVisible=true;
+class StorageManager{
+    exist(){
+        return true;
+    }
+    load(){
+        core.posX=getItem("positionX");
+        core.posY=getItem("positionY");
+        core.zoom=getItem("zoom");
+        core.imageData=getItem("image");
+        if(core.imageData!==null)core.loadImage();
+        core.rects=getItem("rectArray");
+        if(core.rects==null)core.rects=new Array();
         
+    }
+    save(){
+        if(core.posX!==null)storeItem("positionX", core.posX);
+        if(core.posY!==null)storeItem("positionY", core.posY);
+        if(core.zoom!==null)storeItem("zoom", core.zoom);
+        if(core.imageData!==null)storeItem("image", core.imageData);
+        if(core.rects!==null)storeItem("rectArray", core.rects);
     }
 }
 class Mouse{
