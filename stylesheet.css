@@ -41,7 +41,7 @@ canvas{
     width: 100%;
     grid-column: 2/3;
     display: grid;
-    grid-template-rows: 1fr 7fr 32px;
+    grid-template-rows: auto 7fr 32px;
 }
 textarea{
     resize: none;
@@ -58,4 +58,51 @@ textarea{
 }
 #clipBoard{
     float: right;
+}
+
+input[type="radio"]{
+    display: none;
+}
+
+.tab {
+    display: flex;
+    flex-flow: wrap;
+    grid-row: 1;
+}
+
+.tab-item{
+    display: block;
+    flex-grow: 1;
+    text-align: center;
+    padding: 3px 0;
+    cursor: pointer;
+    order: -1;
+    height: auto;
+
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+.tab-item:not(:first-of-type){
+    border-left: none;
+}
+
+.tab-input:checked + .tab-item{
+    background: gray;
+    color: white;
+}
+
+.tab-content{
+    width: 100%;
+    height: auto;
+    display: none;
+    /* justify-content: center; */
+    /* align-items: center; */
+    font-size: 20px;
+    border: 1px solid slategray;
+}
+
+.tab-input:checked+.tab-item+.tab-content{
+    display: flex;
 }

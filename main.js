@@ -7,7 +7,7 @@ class Vector2{
 
 //定数宣言
 const maxDisplaySize=new Vector2(9, 5);
-const displayPixel=16;
+const displayPixel=32;
 const maxCharacter=4096;
 
 //グローバル定義
@@ -19,6 +19,7 @@ var mouse;
 var input;
 var textAreaElement;
 var charCountElement;
+var informationElement;
 
 function setup(){
     core=new Core();//コア定義
@@ -27,6 +28,7 @@ function setup(){
     var wrapperDiv=document.getElementById("wrapper");
     textAreaElement=document.getElementById("sources");
     charCountElement=document.getElementById("charCount");
+    informationElement=document.querySelector("#information");
     
     canvas=createCanvas(wrapperDiv.offsetWidth,wrapperDiv.offsetHeight);
     canvas.parent("wrapper");
@@ -114,6 +116,7 @@ function draw(){
                 pop();
             }
         }
+        setInfo();
     }
 }
 function keyPressed(){
@@ -130,7 +133,7 @@ function ImageSelected(file){//画像のロード
             temp.hide();
             console.log(temp.width);
         if(temp.width%displayPixel!=0 || temp.height%displayPixel!=0){
-            if(confirm("画像サイズが16の倍数ではありません、読み込みますか？")==false)
+            if(confirm(`画像サイズが${displayPixel}の倍数ではありません、読み込みますか？`)==false)
                 return;
         }
         if(maxDisplaySize.x*displayPixel<temp.width || maxDisplaySize.y*displayPixel<temp.height){
@@ -198,6 +201,10 @@ function zoom(event){
             core.zoom+=2;
         core.zoom=Math.min(100,Math.max(1,core.zoom));
     }
+}
+
+function setInfo(){
+    informationElement.innerHTML=`X:${Math.floor((mouseX-(width/2+core.posX))/core.zoom)}, Y:${Math.floor((mouseY-(height/2+core.posY))/core.zoom)}</br>${core.image!==null?`画像サイズ:${core.image.width}x${core.image.height}`:""}</br>${core.image!==null?`ディスプレイのサイズ:${core.image.width%displayPixel==0?core.image.width/displayPixel:"推定できません"}x${core.image.height%displayPixel==0?core.image.height/displayPixel:"推定できません"}`:""}`;
 }
 
 function SetSource(){

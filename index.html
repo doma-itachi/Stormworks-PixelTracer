@@ -15,6 +15,29 @@
             <div class="canvas" id="wrapper"></div>
 
             <div class="leftMenu">
+                <div class="tab">
+                    <input id="menu-info" class="tab-input" name="tabmenu" type="radio" checked="checked">
+                    <label for="menu-info" class="tab-item">情報</label>
+                    <div class="tab-content">
+                        <p id="information">X</p>
+                    </div>
+                    
+                    <input id="menu-how" class="tab-input" name="tabmenu" type="radio">
+                    <label for="menu-how" class="tab-item">操作方法</label>
+                    <div class="tab-content">
+                        <p>右クリック: トレース</br>
+                            マウス中ボタン: 移動</br>
+                            マウスホイール: 拡大縮小</br>
+                            Ctrl+Z: 一つ前の状態に戻る</p>
+                    </div>
+
+                    <input id="menu-config" class="tab-input" name="tabmenu" type="radio">
+                    <label for="menu-config" class="tab-item">設定</label>
+                    <div class="tab-content">
+
+                    </div>
+                </div>
+
                 <textarea id="sources" spellcheck="false"></textarea>
 
                 <div class="bottomMenuDiv">
