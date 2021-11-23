@@ -141,6 +141,13 @@ function mousePressed(){
             mouse.selecting=true;
             mouse.selectStartPixel.x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
             mouse.selectStartPixel.y=Math.floor((mouseY-(height/2+core.posY))/core.zoom);
+
+            //範囲外だったら中止
+            if(mouse.selectStartPixel.x<0 || core.image.width<mouse.selectStartPixel.x || mouse.selectStartPixel.y<0 || core.image.height<mouse.selectStartPixel.y){
+                mouse.selecting=false;
+                return;
+            }
+            
             mouse.selectEndPixel.x=mouse.selectStartPixel.x;
             mouse.selectEndPixel.y=mouse.selectStartPixel.y;
         }
@@ -164,7 +171,10 @@ function mouseDragged(){
 
 function mouseReleased(){
     if(mouse.selecting){
-        core.rects.push(new Rect(mouse.selectStartPixel.x,mouse.selectStartPixel.y,mouse.selectEndPixel.x-mouse.selectStartPixel.x+1,mouse.selectEndPixel.y-mouse.selectStartPixel.y+1));
+        if(0<=mouse.selectEndPixel.x && mouse.selectEndPixel.x<=core.image.width && 0<=mouse.selectEndPixel.y && mouse.selectEndPixel.y<=core.image.height){
+            core.rects.push(new Rect(mouse.selectStartPixel.x,mouse.selectStartPixel.y,mouse.selectEndPixel.x-mouse.selectStartPixel.x+1,mouse.selectEndPixel.y-mouse.selectStartPixel.y+1));
+        }
+        
         mouse.selecting=false;
         SetSource();
     }
