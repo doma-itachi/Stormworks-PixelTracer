@@ -41,7 +41,7 @@ canvas{
     width: 100%;
     grid-column: 2/3;
     display: grid;
-    grid-template-rows: 1fr 5fr 1fr;
+    grid-template-rows: 1fr 7fr 32px;
 }
 textarea{
     resize: none;
@@ -51,7 +51,11 @@ textarea{
 
 .bottomMenuDiv{
     grid-row: 3;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 6px;
+    margin-right: 4px;
 }
-.clipBoard{
+#clipBoard{
     float: right;
 }

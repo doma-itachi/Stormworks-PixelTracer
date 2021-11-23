@@ -23,6 +23,7 @@ var charCountElement;
 function setup(){
     core=new Core();//コア定義
 
+    //HTML操作
     var wrapperDiv=document.getElementById("wrapper");
     textAreaElement=document.getElementById("sources");
     charCountElement=document.getElementById("charCount");
@@ -32,6 +33,8 @@ function setup(){
 
     input=createFileInput(ImageSelected);
     input.parent("menu");
+
+    document.querySelector("#clipBoard").addEventListener("click", this.copyToClipBoard);
 
     //復帰
     storageMgr=new StorageManager();
@@ -216,6 +219,10 @@ function getSource(){
         source+=`\n${func}(${core.rects[i].x},${core.rects[i].y},${core.rects[i].sx},${core.rects[i].sy})`;
     }
     return source;
+}
+function copyToClipBoard(){
+    navigator.clipboard.writeText("textAreaElement.value");
+    alert("コピーしました!");
 }
 
 class Core{
