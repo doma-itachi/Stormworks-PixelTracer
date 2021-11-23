@@ -37,8 +37,21 @@ canvas{
     grid-template-rows: auto 1fr;
 }
 
+.leftMenu{
+    width: 100%;
+    grid-column: 2/3;
+    display: grid;
+    grid-template-rows: 1fr 5fr 1fr;
+}
 textarea{
     resize: none;
-    grid-column: 2/3;
+    grid-row: 2;
     outline: none;
+}
+
+.bottomMenuDiv{
+    grid-row: 3;
+}
+.clipBoard{
+    float: right;
 }

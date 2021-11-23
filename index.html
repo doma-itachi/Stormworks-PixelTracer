@@ -13,7 +13,15 @@
                 <label for="isFill">drawRectFを用いる</label>
             </div>
             <div class="canvas" id="wrapper"></div>
-            <textarea id="sources" spellcheck="false"></textarea>
+
+            <div class="leftMenu">
+                <textarea id="sources" spellcheck="false"></textarea>
+
+                <div class="bottomMenuDiv">
+                    <a id="charCount"></a>
+                    <button class="clipBoard">クリップボードにコピー</button>
+                </div>
+            </div>
         </div>
         <script src="./lib/p5.js"></script>
         <script src="./main.js"></script>

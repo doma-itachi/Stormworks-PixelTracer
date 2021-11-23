@@ -8,6 +8,7 @@ class Vector2{
 //定数宣言
 const maxDisplaySize=new Vector2(9, 5);
 const displayPixel=16;
+const maxCharacter=4096;
 
 //グローバル定義
 isMenuVisible=true;
@@ -17,12 +18,14 @@ var theme;
 var mouse;
 var input;
 var textAreaElement;
+var charCountElement;
 
 function setup(){
     core=new Core();//コア定義
 
     var wrapperDiv=document.getElementById("wrapper");
     textAreaElement=document.getElementById("sources");
+    charCountElement=document.getElementById("charCount");
     
     canvas=createCanvas(wrapperDiv.offsetWidth,wrapperDiv.offsetHeight);
     canvas.parent("wrapper");
@@ -195,7 +198,10 @@ function zoom(event){
 }
 
 function SetSource(){
-    textAreaElement.value=getSource();
+    source=getSource();
+    textAreaElement.value=source;
+    charCountElement.textContent=`${source.length}/${maxCharacter}`
+
 }
 function getSource(){
     let chkbox=document.getElementById("isFill");
