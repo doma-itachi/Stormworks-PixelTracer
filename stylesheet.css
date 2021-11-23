@@ -129,7 +129,9 @@ input[type="radio"]{
     /* justify-content: center; */
     /* align-items: center; */
     font-size: 20px;
-    border: 1px solid gray;
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
 }
 
 .tab-input:checked+.tab-item+.tab-content{
