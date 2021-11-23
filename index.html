@@ -3,14 +3,21 @@
     <head>
         <title>Stormworks PixelTracer</title>
         <link rel="stylesheet" href="stylesheet.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+2&display=swap" rel="stylesheet">
     </head>
 
     <body>
         <div class="wrapper">
-            <div class="menu" id="menu">
-                <p>Stormworks PixelTracer v1.0</p>
-                <input type="checkbox" id="isFill" checked>
-                <label for="isFill">drawRectFを用いる</label>
+            <div class="menu">
+                <img src="./img/Header.png" class="header-img">
+                <div class="header-menu" id="menu">
+                    <p>Stormworks PixelTracer v1.0</p>
+                    <input type="checkbox" id="isFill" checked>
+                    <label for="isFill">drawRectFを用いる</label>
+                </div>
             </div>
             <div class="canvas" id="wrapper"></div>
 
@@ -25,7 +32,7 @@
                     <input id="menu-how" class="tab-input" name="tabmenu" type="radio">
                     <label for="menu-how" class="tab-item">操作方法</label>
                     <div class="tab-content">
-                        <p>右クリック: トレース</br>
+                        <p>左クリック: トレース</br>
                             マウス中ボタン: 移動</br>
                             マウスホイール: 拡大縮小</br>
                             Ctrl+Z: 一つ前の状態に戻る</p>

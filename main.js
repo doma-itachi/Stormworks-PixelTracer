@@ -204,7 +204,7 @@ function zoom(event){
 }
 
 function setInfo(){
-    informationElement.innerHTML=`X:${Math.floor((mouseX-(width/2+core.posX))/core.zoom)}, Y:${Math.floor((mouseY-(height/2+core.posY))/core.zoom)}</br>${core.image!==null?`画像サイズ:${core.image.width}x${core.image.height}`:""}</br>${core.image!==null?`ディスプレイのサイズ:${core.image.width%displayPixel==0?core.image.width/displayPixel:"推定できません"}x${core.image.height%displayPixel==0?core.image.height/displayPixel:"推定できません"}`:""}`;
+    informationElement.innerHTML=`X:${Math.floor((mouseX-(width/2+core.posX))/core.zoom+1)}, Y:${Math.floor((mouseY-(height/2+core.posY))/core.zoom+1)}</br>${core.image!==null?`画像サイズ:${core.image.width}x${core.image.height}`:""}</br>${core.image!==null?`ディスプレイのサイズ:${core.image.width%displayPixel==0?core.image.width/displayPixel:"推定できません"}x${core.image.height%displayPixel==0?core.image.height/displayPixel:"推定できません"}`:""}`;
 }
 
 function SetSource(){
