@@ -228,7 +228,7 @@ function getSource(){
     return source;
 }
 function copyToClipBoard(){
-    navigator.clipboard.writeText("textAreaElement.value");
+    navigator.clipboard.writeText(textAreaElement.value);
     alert("コピーしました!");
 }
 
