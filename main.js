@@ -172,8 +172,14 @@ function mousePressed(){
 }
 function mouseDragged(){
     if(mouse.selecting){
-        mouse.selectEndPixel.x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
-        mouse.selectEndPixel.y=Math.floor((mouseY-(height/2+core.posY))/core.zoom);
+        rawX=(mouseX-(width/2+core.posX))/core.zoom;
+        rawY=(mouseY-(height/2+core.posY))/core.zoom;
+        if(mouse.selectStartPixel.x<=mouse.selectEndPixel.x)mouse.selectEndPixel.x=Math.floor(rawX);
+        else mouse.selectEndPixel.x=Math.floor(rawX+1);
+        if(mouse.selectStartPixel.y<=mouse.selectEndPixel.y)mouse.selectEndPixel.y=Math.floor(rawY);
+        else mouse.selectEndPixel.y=Math.floor(rawY+1);
+        // mouse.selectEndPixel.x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
+        // mouse.selectEndPixel.y=Math.floor((mouseY-(height/2+core.posY))/core.zoom);
     }
     if(mouse.dragging){
         core.posX=mouseX-mouse.mouseStart.x;
