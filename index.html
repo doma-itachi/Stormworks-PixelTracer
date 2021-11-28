@@ -16,8 +16,8 @@
             <div class="menu" id="menu">
                 <p id="Title">Stormworks PixelTracer v1.0</p>
                 <div id="inputBox"></div>
-                <button>保存</button>
-                <p class="log">保存しました...12:00</p>
+                <button id="saveButton">保存</button>
+                <p class="log" id="log"></p>
                 <!-- <img src="./img/Header.png" class="header-img">
                 <div class="header-menu" id="menu">
                     <p>Stormworks PixelTracer v1.0</p>
@@ -46,8 +46,12 @@
                     <input id="menu-config" class="tab-input" name="tabmenu" type="radio">
                     <label for="menu-config" class="tab-item">設定</label>
                     <div class="tab-content">
-                        <input type="checkbox" id="isFill" checked>
-                        <label for="isFill">drawRectFを用いる</label>
+                        <table>
+                            <tr>
+                                <td><input type="checkbox" id="isFill" checked></td>
+                                <td><label for="isFill">drawRectFを用いる</label></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 

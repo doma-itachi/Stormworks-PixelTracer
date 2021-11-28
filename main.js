@@ -17,6 +17,7 @@ var core;
 var theme;
 var mouse;
 var input;
+var logElement;
 var textAreaElement;
 var charCountElement;
 var informationElement;
@@ -29,17 +30,21 @@ function setup(){
     textAreaElement=document.getElementById("sources");
     charCountElement=document.getElementById("charCount");
     informationElement=document.querySelector("#information");
-    
+    logElement=document.getElementById("log");
+
     canvas=createCanvas(wrapperDiv.offsetWidth,wrapperDiv.offsetHeight);
     canvas.parent("wrapper");
 
     input=createFileInput(ImageSelected);
     input.parent("inputBox");
 
+    //ボタン
+    document.querySelector("#saveButton").addEventListener("click", this.saveDat);
     document.querySelector("#clipBoard").addEventListener("click", this.copyToClipBoard);
 
     //復帰
     storageMgr=new StorageManager();
+    storageMgr.log=logElement;
     if(storageMgr.exist())storageMgr.load();
 
     //イベント
@@ -237,6 +242,9 @@ function copyToClipBoard(){
     navigator.clipboard.writeText(textAreaElement.value);
     alert("コピーしました!");
 }
+function saveDat(){
+    storageMgr.save();
+}
 
 class Core{
     constructor(){
@@ -266,6 +274,9 @@ class Rect{
     }
 }
 class StorageManager{
+    constructor(){
+        this.log;
+    }
     exist(){
         return true;
     }
@@ -285,6 +296,9 @@ class StorageManager{
         if(core.zoom!==null)storeItem("zoom", core.zoom);
         if(core.imageData!==null)storeItem("image", core.imageData);
         if(core.rects!==null)storeItem("rectArray", core.rects);
+
+        var d=new Date(Date.now());
+        logElement.innerHTML=`保存しました...(${d.getHours()}:${d.getMinutes()}:${d.getSeconds()})`;
     }
 }
 class Mouse{
