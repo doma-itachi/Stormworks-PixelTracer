@@ -34,7 +34,7 @@ function setup(){
     canvas.parent("wrapper");
 
     input=createFileInput(ImageSelected);
-    input.parent("menu");
+    input.parent("inputBox");
 
     document.querySelector("#clipBoard").addEventListener("click", this.copyToClipBoard);
 

@@ -16,33 +16,38 @@ body{
     padding: 0%;
 }
 .menu{
+    background-size: cover;
+    background-position: center;
+    background-image: url("./img/Header.png");
+    display: grid;
+    grid-template-columns: auto 300px 100px 200px;
+
     grid-column: 1/3;
     grid-row: 1;
     width: 100%;
     height: 100%;
 }
-
-.header-img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.header-menu{
-    position: absolute;
-    top: 0px;
-    display: flex;
-    margin: auto;
-}
-.header-menu>p{
+.menu>#Title{
     vertical-align: bottom;
+    white-space: nowrap;
     font-size: 30px;
     margin: 0 0 0 10px;
 }
 
-.header-menu>input, .header-menu>label{
-    vertical-align: bottom;
-    /* margin: 16px 0 0 16px; */
+.menu>#inputBox{
+    grid-column: 2;
+    grid-row: 1;
+    margin: auto;
+}
+.menu>.log{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.menu>button{
+    grid-column: 3;
+    grid-row: 1;
+    margin: auto;
+    width: 70px;
 }
 
 canvas{
