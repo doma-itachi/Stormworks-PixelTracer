@@ -46,6 +46,9 @@ function setup(){
     document.querySelector("#AutoSelectButton").addEventListener("click", this.enableAutoTraceMode);
     document.querySelector("#saveButton").addEventListener("click", this.saveDat);
     document.querySelector("#clipBoard").addEventListener("click", this.copyToClipBoard);
+    document.querySelector("#clearButton").addEventListener("click", this.clearItems);
+    document.querySelector("#resetButton").addEventListener("click", this.reset);
+    document.querySelector("#refreshCode").addEventListener("click", this.SetSource);
 
     //復帰
     storageMgr=new StorageManager();
@@ -137,7 +140,7 @@ function draw(){
                 fill(255,255,255);
                 textAlign(LEFT,TOP);
                 textSize(50);
-                text("自動トレースモード(Beta)",10,10+offset);
+                text("自動トレースモード",10,10+offset);
 
                 textSize(20);
                 text("対象の色を選択してください",180,60+offset);
@@ -167,7 +170,7 @@ function ImageSelected(file){//画像のロード
         temp=createImg(file.data,"","",async()=>{
             await(3000);
             temp.hide();
-            console.log(temp.width);
+            
         if(temp.width%displayPixel!=0 || temp.height%displayPixel!=0){
             if(confirm(`画像サイズが${displayPixel}の倍数ではありません、読み込みますか？`)==false)
                 return;
@@ -184,6 +187,8 @@ function ImageSelected(file){//画像のロード
 }
 
 function mousePressed(){
+    if(core.image!=null && mouseX<width && mouseY>0){
+
         if(isAutoTrace==false && mouseButton===LEFT){
             mouse.selecting=true;
             mouse.selectStartPixel.x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
@@ -204,15 +209,16 @@ function mousePressed(){
             mouse.mouseStart.y=mouseY-core.posY;
         }
 
-        if(core.image!=null && mouseX<width && mouseY>0){
-            if(isAutoTrace && mouseButton===LEFT){
-                let x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
-                let y=Math.floor((mouseY-(height/2+core.posY))/core.zoom);
-                let col=core.image.get(x,y);
-                autoTrace.init(core.image, col[0], col[1], col[2]);
-                autoTrace.AutoSelect();
-                isAutoTrace=false;
-            }
+        if(isAutoTrace && mouseButton===LEFT){
+            clearItems();
+
+            let x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
+            let y=Math.floor((mouseY-(height/2+core.posY))/core.zoom);
+            let col=core.image.get(x,y);
+            autoTrace.init(core.image, col[0], col[1], col[2]);
+            autoTrace.AutoSelect();
+            isAutoTrace=false;
+        }
     }
 }
 function mouseDragged(){
@@ -267,15 +273,25 @@ function SetSource(){
 function getSource(){
     let chkbox=document.getElementById("isFill");
     core.isUseFill=chkbox.checked;
+
+    chkbox=document.getElementById("isGenMiniCode");
+    core.isGenMiniCode=chkbox.checked;
     
     let source="--ソースコード";
 
     let func;
+
+    if(core.isGenMiniCode)source+="\nonDraw()"
+
     if(core.isUseFill)func="screen.drawRectF";
     else func="screen.drawRect";
     for(let i=0;i<core.rects.length;i++){
-        source+=`\n${func}(${core.rects[i].x},${core.rects[i].y},${core.rects[i].sx},${core.rects[i].sy})`;
+        source+=`\n${core.isGenMiniCode?"d":func}(${core.rects[i].x},${core.rects[i].y},${core.rects[i].sx},${core.rects[i].sy})`;
     }
+
+    if(core.isGenMiniCode)source+=`\nend`
+
+    if(core.isGenMiniCode)source+=`\nfunction r(x,y,sx,sy)\n    ${func}(x,y,sx,sy)\nend`;
     return source;
 }
 function copyToClipBoard(){
@@ -290,6 +306,14 @@ function enableAutoTraceMode(){
     isAutoTrace=!isAutoTrace;
 }
 
+function clearItems(){
+    core.rects=new Array();
+}
+
+function reset(){
+    storageMgr.reset();
+}
+
 class Core{
     constructor(){
         this.posX=0;
@@ -298,6 +322,7 @@ class Core{
         this.imageData=null;
         this.zoom=1;
         this.isUseFill=true;
+        this.isGenMiniCode=false;
         this.rects=new Array();
     }
     loadImage(){
@@ -343,6 +368,10 @@ class StorageManager{
 
         var d=new Date(Date.now());
         logElement.innerHTML=`保存しました...(${d.getHours()}:${d.getMinutes()}:${d.getSeconds()})`;
+    }
+    reset(){
+        localStorage.clear();
+        window.location.reload();
     }
 }
 class Mouse{
