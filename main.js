@@ -286,7 +286,7 @@ function getSource(){
     if(core.isUseFill)func="screen.drawRectF";
     else func="screen.drawRect";
     for(let i=0;i<core.rects.length;i++){
-        source+=`\n${core.isGenMiniCode?"d":func}(${core.rects[i].x},${core.rects[i].y},${core.rects[i].sx},${core.rects[i].sy})`;
+        source+=`\n${core.isGenMiniCode?"r":func}(${core.rects[i].x},${core.rects[i].y},${core.rects[i].sx},${core.rects[i].sy})`;
     }
 
     if(core.isGenMiniCode)source+=`\nend`
