@@ -19,7 +19,7 @@ body{
     background-position: center;
     background-image: url("./img/Header.png");
     display: grid;
-    grid-template-columns: auto 300px 100px 200px;
+    grid-template-columns: auto 300px 100px 100px 200px;
 
     grid-column: 1/3;
     grid-row: 1;
@@ -47,6 +47,14 @@ body{
     grid-row: 1;
     margin: auto;
     width: 70px;
+}
+
+.menu>#AutoSelectButton{
+    grid-column: 3;
+    width: 100px;
+}
+.menu>#saveButton{
+    grid-column: 4;
 }
 
 canvas{

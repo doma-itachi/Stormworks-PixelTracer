@@ -12,8 +12,11 @@ const maxCharacter=4096;
 
 //グローバル定義
 isMenuVisible=true;
+isAutoTrace=false;
+autoTraceAnimFrm=0;
 var storageMgr;
 var core;
+var autoTrace;
 var theme;
 var mouse;
 var input;
@@ -24,6 +27,7 @@ var informationElement;
 
 function setup(){
     core=new Core();//コア定義
+    autoTrace=new AutoTrace(core);
 
     //HTML操作
     var wrapperDiv=document.getElementById("wrapper");
@@ -39,6 +43,7 @@ function setup(){
     input.parent("inputBox");
 
     //ボタン
+    document.querySelector("#AutoSelectButton").addEventListener("click", this.enableAutoTraceMode);
     document.querySelector("#saveButton").addEventListener("click", this.saveDat);
     document.querySelector("#clipBoard").addEventListener("click", this.copyToClipBoard);
 
@@ -120,6 +125,32 @@ function draw(){
                 }
                 pop();
             }
+
+            //自動トレースオーバーレイ
+            if(autoTraceAnimFrm>0.001){
+                offset=-90+90*easeOutExpo(autoTraceAnimFrm);
+                push();
+                strokeWeight(0);
+                fill(255,255,255,100);
+                rect(0,0+offset,width,90);
+
+                fill(255,255,255);
+                textAlign(LEFT,TOP);
+                textSize(50);
+                text("自動トレースモード(Beta)",10,10+offset);
+
+                textSize(20);
+                text("対象の色を選択してください",180,60+offset);
+
+                //対象のピクセル座標の色を選択
+                let x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
+                let y=Math.floor((mouseY-(height/2+core.posY))/core.zoom);
+                let col=core.image.get(x,y);
+                fill(col[0],col[1],col[2]);
+                rect(width-10,10+offset,-70,70+offset);
+                pop();
+            }
+            if(isAutoTrace){autoTraceAnimFrm=Math.min(1,autoTraceAnimFrm);autoTraceAnimFrm+=0.02}else{autoTraceAnimFrm=Math.max(0,autoTraceAnimFrm);autoTraceAnimFrm-=0.05;}
         }
         setInfo();
     }
@@ -153,8 +184,7 @@ function ImageSelected(file){//画像のロード
 }
 
 function mousePressed(){
-    if(core.image!=null && mouseX<width && mouseY>0){
-        if(mouseButton===LEFT){
+        if(isAutoTrace==false && mouseButton===LEFT){
             mouse.selecting=true;
             mouse.selectStartPixel.x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
             mouse.selectStartPixel.y=Math.floor((mouseY-(height/2+core.posY))/core.zoom);
@@ -173,6 +203,16 @@ function mousePressed(){
             mouse.mouseStart.x=mouseX-core.posX;
             mouse.mouseStart.y=mouseY-core.posY;
         }
+
+        if(core.image!=null && mouseX<width && mouseY>0){
+            if(isAutoTrace && mouseButton===LEFT){
+                let x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
+                let y=Math.floor((mouseY-(height/2+core.posY))/core.zoom);
+                let col=core.image.get(x,y);
+                autoTrace.init(core.image, col[0], col[1], col[2]);
+                autoTrace.AutoSelect();
+                isAutoTrace=false;
+            }
     }
 }
 function mouseDragged(){
@@ -246,6 +286,10 @@ function saveDat(){
     storageMgr.save();
 }
 
+function enableAutoTraceMode(){
+    isAutoTrace=!isAutoTrace;
+}
+
 class Core{
     constructor(){
         this.posX=0;
@@ -257,8 +301,8 @@ class Core{
         this.rects=new Array();
     }
     loadImage(){
-        core.image=createImg(this.imageData,"");
-        core.image.hide();
+        core.image=loadImage(this.imageData,"");
+        // core.image.hide();
         SetSource();
     }
     positionClamp(){
@@ -311,6 +355,125 @@ class Mouse{
         
     }
 }
+
+class AutoTrace{
+    constructor(_core){
+        this.core=_core;
+
+        this.image;
+        this.threshold=0;
+        this.maps;// 画像サイズ**+2**のサイズ
+        this.edges;//左上端
+    }
+
+    init(img, r,g,b){
+        //画像の選択範囲を解析
+        this.image=img;
+        //画像サイズ+2の二次元配列を定義（範囲外選択で例外を防ぐため）
+        this.maps=new Array(this.image.height+2);
+        for(let i=0;i<this.maps.length;i++)this.maps[i]=new Array(this.image.width+2);
+
+        //そこにピクセルが存在するか判定
+        //0=空白 1=未選択 2=選択済み
+        for(let i=0;i<this.maps.length-2;i++){
+            for(let j=0; j<this.maps[i].length-2;j++){
+                var rgb=core.image.get(j,i);
+                if(r-this.threshold<=rgb[0] && rgb[0]<=r+this.threshold && 
+                    g-this.threshold<=rgb[1] && rgb[1]<=g+this.threshold &&
+                    b-this.threshold<=rgb[2] && rgb[2]<=b+this.threshold)
+                    {
+                        this.maps[i+1][j+1]=1;
+                    }
+                    else{
+                        this.maps[i+1][j+1]=0;
+                    }
+            }
+        }
+        return this.maps;//デバッグ用
+    }
+    scanEdges(){
+        this.edges=new Array();
+        //左上端を列挙
+        for(let i=0;i<this.maps.length-2;i++){
+            for(let j=0;j<this.maps[i].length-2;j++){
+                if(this.maps[i+1][j+1]==1 && this.maps[i][j+1]!=1 && this.maps[i+1][j]!=1){
+                    this.edges.push([i+1,j+1]);
+                }
+            }
+        }
+        return this.edges;
+    }
+    AutoSelect(){
+        //右→下↓の順と下↓右→の順に面積を求め、大きい方を選択に入れる、同時にthis.mapsの選択した座標を2(選択済み)にする←これをthis.mapsから1がなくなるまで繰り返す
+        var isEnded=false;
+
+        while(isEnded==false){
+            isEnded=true;
+            for(let i=0;i<this.maps.length;i++){
+                let foo=this.maps[i].includes(1);
+                if(foo)isEnded=false;
+            }
+
+            this.scanEdges();
+
+            for(let n=0;n<this.edges.length;n++){
+                origin=this.edges[n];
+
+                var sxH=0;
+                var syH=1;
+                var sxV=1;
+                var syV=0;
+
+                //面積
+                //右→
+                while(this.maps[origin[0]][origin[1]+sxH]!=0)sxH++;
+
+                //下↓
+                var _nofill=false;
+                while(_nofill==false){
+                    for(let x=0;x<sxH;x++){
+                        if(this.maps[origin[0]+syH][origin[1]+x]==0)_nofill=true;
+                    }
+                    if(_nofill==false)syH++;
+                }
+                // console.log(`${sxH},${syH}`);
+
+                //下↓
+                while(this.maps[origin[0]+syV][origin[1]]!=0)syV++;
+
+                //右→
+                var _nofill=false;
+                while(_nofill==false){
+                    for(let y=0;y<syV;y++){
+                        if(this.maps[origin[0]+y][origin[1]+sxV]==0)_nofill=true;
+                    }
+                    if(_nofill==false)sxV++;
+                }
+                // console.log(`${sxV},${syV}`);
+                
+                var sx, sy;
+                if(sxV*syV<=sxH*syH){
+                    sx=sxH;
+                    sy=syH;
+                }else{
+                    sx=sxV;
+                    sy=syV;
+                }
+
+                // console.log(`${sxH},${syH}`);
+                core.rects.push(new Rect(origin[1]-1,origin[0]-1,sx,sy));
+                //this.mapsに選択範囲を適用（1未選択→2選択済み）
+                for(let _sy=0;_sy<sy;_sy++){
+                    for(let _sx=0;_sx<sx;_sx++){
+                        this.maps[origin[0]+_sy][origin[1]+_sx]=2;
+                    }
+                }
+            }
+        }
+        SetSource();
+    }
+}
+
 class Position{
     constructor(){
         this.x=0;
@@ -321,3 +484,7 @@ class Position{
 class Theme{
 
 }
+
+function easeOutExpo(x){
+    return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+    }
