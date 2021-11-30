@@ -281,7 +281,7 @@ function getSource(){
 
     let func;
 
-    if(core.isGenMiniCode)source+="\nonDraw()"
+    if(core.isGenMiniCode)source+="\nfunction onDraw()"
 
     if(core.isUseFill)func="screen.drawRectF";
     else func="screen.drawRect";
@@ -455,26 +455,26 @@ class AutoTrace{
 
                 //面積
                 //右→
-                while(this.maps[origin[0]][origin[1]+sxH]!=0)sxH++;
+                while(this.maps[origin[0]][origin[1]+sxH]==1 || this.maps[origin[0]][origin[1]+sxH]==2)sxH++;
 
                 //下↓
                 var _nofill=false;
                 while(_nofill==false){
                     for(let x=0;x<sxH;x++){
-                        if(this.maps[origin[0]+syH][origin[1]+x]==0)_nofill=true;
+                        if(this.maps[origin[0]+syH][origin[1]+x]==0 || this.maps[origin[0]+syH][origin[1]+x]==undefined)_nofill=true;
                     }
                     if(_nofill==false)syH++;
                 }
                 // console.log(`${sxH},${syH}`);
 
                 //下↓
-                while(this.maps[origin[0]+syV][origin[1]]!=0)syV++;
+                while(this.maps[origin[0]+syV][origin[1]]==1 || this.maps[origin[0]+syV][origin[1]]==2)syV++;
 
                 //右→
                 var _nofill=false;
                 while(_nofill==false){
                     for(let y=0;y<syV;y++){
-                        if(this.maps[origin[0]+y][origin[1]+sxV]==0)_nofill=true;
+                        if(this.maps[origin[0]+y][origin[1]+sxV]==0 || this.maps[origin[0]+y][origin[1]+sxV]==undefined)_nofill=true;
                     }
                     if(_nofill==false)sxV++;
                 }
