@@ -3,7 +3,8 @@
     <head>
         <title>Stormworks PixelTracer</title>
         <link rel="icon" href="./img/favicon256.png">
-        <link rel="stylesheet" href="https://doma-itachi.github.io/Stormworks-PixelTracer/stylesheet.css"/>
+        <!-- <link rel="stylesheet" href="https://doma-itachi.github.io/Stormworks-PixelTracer/stylesheet.css"/> -->
+        <link rel="stylesheet" href="./stylesheet.css"/>
 
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +21,7 @@
                 <div id="inputBox"></div>
                 <button id="AutoSelectButton">自動で選択する</button>
                 <button id="saveButton">保存</button>
-                <p class="log" id="log"></p>
+                <p class="log" id="logE"></p>
             </div>
             <div class="canvas" id="wrapper"></div>
 
@@ -45,6 +46,10 @@
                     <label for="menu-config" class="tab-item">設定</label>
                     <div class="tab-content">
                         <table>
+                            <!-- <tr>
+                                <td><input type="checkbox" id="isSetColor"></td>
+                                <td> <label for="isSetColor">自動選択時、色をコードに含める</label></td>
+                            </tr> -->
                             <tr>
                                 <td><input type="checkbox" id="isFill" checked></td>
                                 <td><label for="isFill">drawRectFを用いる</label></td>

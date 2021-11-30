@@ -18,7 +18,7 @@ body{
     background-position: center;
     background-image: url("./img/Header.png");
     display: grid;
-    grid-template-columns: auto 300px 100px 100px 200px;
+    grid-template-columns: auto auto 100px 100px 200px;
 
     grid-column: 1/3;
     grid-row: 1;
@@ -29,6 +29,7 @@ body{
     vertical-align: bottom;
     white-space: nowrap;
     font-size: 30px;
+    color: black;
     margin: 0 0 0 10px;
 }
 
@@ -71,7 +72,7 @@ canvas{
 .wrapper{
     height: 100%;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 6fr 2fr;
     grid-template-rows: 50px 1fr;
 }
 
@@ -98,6 +99,7 @@ textarea{
 
 #clipBoard{
     float: right;
+    width: auto;
 }
 
 input[type="radio"]{

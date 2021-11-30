@@ -34,7 +34,7 @@ function setup(){
     textAreaElement=document.getElementById("sources");
     charCountElement=document.getElementById("charCount");
     informationElement=document.querySelector("#information");
-    logElement=document.getElementById("log");
+    logElement=document.getElementById("logE");
 
     canvas=createCanvas(wrapperDiv.offsetWidth,wrapperDiv.offsetHeight);
     canvas.parent("wrapper");
@@ -52,7 +52,7 @@ function setup(){
 
     //復帰
     storageMgr=new StorageManager();
-    storageMgr.log=logElement;
+    storageMgr.logElement=logElement;
     if(storageMgr.exist())storageMgr.load();
 
     //イベント
@@ -344,7 +344,7 @@ class Rect{
 }
 class StorageManager{
     constructor(){
-        this.log;
+        this.logElement;
     }
     exist(){
         return true;
