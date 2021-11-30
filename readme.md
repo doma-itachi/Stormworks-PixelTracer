@@ -1,4 +1,4 @@
-# Stormworks PixelTracer ドット画像から自動でluaコード
+# Stormworks PixelTracer
 ドット画像から文字などを自動で抽出し、ゲーム「Stormworks: Build and Rescue」内のモニター用のluaコードを生成するツールです。(ブラウザで動作)  
 ドット画像(32x32の倍数サイズ)から文字などを**自動**でトレースし、luaコードを生成します。(手動でトレースもできます)  
 A tool can generate luaCode from an image for display on the monitor in "Stormworks Build And Rescue".
