@@ -150,3 +150,7 @@ input[type="radio"]{
 .tab-input:checked+.tab-item+.tab-content{
     display: flex;
 }
+
+.text{
+    font-size: 15px;
+}
