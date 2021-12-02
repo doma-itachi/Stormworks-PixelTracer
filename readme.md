@@ -4,7 +4,7 @@ A tool can generate luaCode from an image for display on the monitor in "Stormwo
 
 ## 使い方 - How to use
 1. 任意の画像エディタでモニターに表示させたい画像を作成(サイズはゲーム内モニターの解像度、32x32の倍数)
-2. PixelTracerでファイルを読み込んでから、"自動で選択する"から対象の色を指定[^freehand] [^minify]
+2. PixelTracerでファイルを読み込み、"自動で選択する"から対象の色を指定[^freehand] [^minify]
 3. クリップボードにコピーしてゲーム内のluaエディタに貼り付け
 
 [^freehand]: 手動で選択することもできます
