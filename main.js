@@ -465,7 +465,6 @@ class AutoTrace{
                     }
                     if(_nofill==false)syH++;
                 }
-                // console.log(`${sxH},${syH}`);
 
                 //下↓
                 while(this.maps[origin[0]+syV][origin[1]]==1 || this.maps[origin[0]+syV][origin[1]]==2)syV++;
@@ -478,7 +477,6 @@ class AutoTrace{
                     }
                     if(_nofill==false)sxV++;
                 }
-                // console.log(`${sxV},${syV}`);
                 
                 var sx, sy;
                 if(sxV*syV<=sxH*syH){
@@ -489,7 +487,6 @@ class AutoTrace{
                     sy=syV;
                 }
 
-                // console.log(`${sxH},${syH}`);
                 core.rects.push(new Rect(origin[1]-1,origin[0]-1,sx,sy));
                 //this.mapsに選択範囲を適用（1未選択→2選択済み）
                 for(let _sy=0;_sy<sy;_sy++){
