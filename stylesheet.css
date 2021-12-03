@@ -16,7 +16,7 @@ body{
 .menu{
     background-size: cover;
     background-position: center;
-    background-image: url("./img/Header.png");
+    background-image: url("./img/Header.webp");
     display: grid;
     grid-template-columns: auto auto 100px 100px 200px;
 
