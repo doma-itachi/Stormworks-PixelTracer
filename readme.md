@@ -14,6 +14,12 @@ A tool can generate luaCode from an image for display on the monitor in "Stormwo
 [Stormworks PixelTracer](https://doma-itachi.github.io/Stormworks-PixelTracer/ "Stormworks PixelTracer")
 
 ## アップデート内容 - Updates
+### v1.2
+- 色を自動適用(自動トレース時のみ)
+- ガンマ補正(不安定)
+- UIのレスポンス改善
+- 上に伴い、"ソースコードを更新"ボタン削除
+
 ### v1.1
 - 自動トレース機能追加
 - コード最適化(最小化)機能追加
