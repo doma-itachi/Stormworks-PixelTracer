@@ -48,7 +48,11 @@ function setup(){
     document.querySelector("#clipBoard").addEventListener("click", this.copyToClipBoard);
     document.querySelector("#clearButton").addEventListener("click", this.clearItems);
     document.querySelector("#resetButton").addEventListener("click", this.reset);
-    document.querySelector("#refreshCode").addEventListener("click", this.SetSource);
+
+    //---
+    document.querySelectorAll(".RefreshSrc").forEach(function (elm){
+        elm.addEventListener("change", this.SetSource);
+    });
 
     //復帰
     storageMgr=new StorageManager();
@@ -274,6 +278,12 @@ function getSource(){
     let chkbox=document.getElementById("isFill");
     core.isUseFill=chkbox.checked;
 
+    chkbox=document.getElementById("isSetColor");
+    core.isSetColor=chkbox.checked;
+
+    chkbox=document.getElementById("isUseGamma");
+    core.isUseGamma=chkbox.checked;
+
     chkbox=document.getElementById("isGenMiniCode");
     core.isGenMiniCode=chkbox.checked;
     
@@ -281,7 +291,11 @@ function getSource(){
 
     let func;
 
-    if(core.isGenMiniCode)source+="\nfunction onDraw()"
+    if(core.isGenMiniCode)source+="\nfunction onDraw()";//関数はじめ
+
+    if(core.isSetColor && core.color!==null){
+        source+=`\nscreen.setColor(${core.isUseGamma?RGB.gammaFix(core.color.r):core.color.r},${core.isUseGamma?RGB.gammaFix(core.color.g):core.color.g},${core.isUseGamma?RGB.gammaFix(core.color.b):core.color.b})`;
+    }
 
     if(core.isUseFill)func="screen.drawRectF";
     else func="screen.drawRect";
@@ -321,12 +335,19 @@ class Core{
         this.image=null;
         this.imageData=null;
         this.zoom=1;
+
+        this.color=null;
+
         this.isUseFill=true;
+        this.isSetColor=true;
+        this.isUseGamma=false;
         this.isGenMiniCode=false;
+
         this.rects=new Array();
     }
     loadImage(){
         core.image=loadImage(this.imageData,"");
+        this.color=null;
         // core.image.hide();
         SetSource();
     }
@@ -396,6 +417,9 @@ class AutoTrace{
     }
 
     init(img, r,g,b){
+        //色をセット
+        core.color=new RGB(r,g,b);
+
         //画像の選択範囲を解析
         this.image=img;
         //画像サイズ+2の二次元配列を定義（範囲外選択で例外を防ぐため）
@@ -509,6 +533,17 @@ class Position{
 
 class Theme{
 
+}
+
+class RGB{
+    constructor(_r,_g,_b){
+        this.r=_r;
+        this.g=_g;
+        this.b=_b;
+    }
+    static gammaFix(c){
+        return c^2.2/255^2.2*c
+    }
 }
 
 function easeOutExpo(x){

@@ -56,16 +56,21 @@
                                 <td> <label for="isSetColor">自動選択時、色をコードに含める</label></td>
                             </tr> -->
                             <tr>
-                                <td><input type="checkbox" id="isFill" checked></td>
+                                <td><input type="checkbox" id="isFill" class="RefreshSrc" checked></td>
                                 <td><label for="isFill">drawRectFを用いる</label></td>
                             </tr>
                             <tr>
-                                <td><input type="checkbox" id="isGenMiniCode"></input></td>
-                                <td> <label for="isGenMiniCode">最適化されたコードを出力</label> </td>
+                                <td> <input type="checkbox" id="isSetColor" class="RefreshSrc" checked> </td>
+                                <td> <label for="isSetColor">色をつける(自動選択時のみ)</label> </td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td> <button id="refreshCode">ソースコードを更新</button> </td>
+                                <td> <input type="checkbox" id="isUseGamma" class="RefreshSrc"> </td>
+                                <td> <label for="isUseGamma">色を補正(ガンマ補正)</label> </td>
+                            </tr>
+
+                            <tr>
+                                <td><input type="checkbox" id="isGenMiniCode" class="RefreshSrc"></input></td>
+                                <td> <label for="isGenMiniCode">最適化されたコードを出力</label> </td>
                             </tr>
 
                             <tr>
@@ -78,15 +83,15 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text"> GitHubリポジトリ: <a href="https://github.com/doma-itachi/Stormworks-PixelTracer" target="_blank">GitHub</a></td>
+                                <td class="Author"> GitHubリポジトリ: <a href="https://github.com/doma-itachi/Stormworks-PixelTracer" target="_blank">GitHub</a></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text"> 作者Twitter: <a href="https://twitter.com/itachi_yukari" target="_blank">@itachi_yukari</a> </td>
+                                <td class="Author"> Twitter: <a href="https://twitter.com/itachi_yukari" target="_blank">@itachi_yukari</a> </td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text">バグ報告＆要望はDMまで</td>
+                                <td class="Author">バグ報告＆要望はDMまで</td>
                             </tr>
                         </table>
                     </div>
