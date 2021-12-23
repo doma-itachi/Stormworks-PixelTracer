@@ -33,13 +33,13 @@
             <div class="leftMenu">
                 <div class="tab">
                     <input id="menu-info" class="tab-input" name="tabmenu" type="radio" checked="checked">
-                    <label for="menu-info" class="tab-item">情報</label>
+                    <label for="menu-info" class="tab-item NotSelectable">情報</label>
                     <div class="tab-content">
                         <p id="information"></p>
                     </div>
                     
                     <input id="menu-how" class="tab-input" name="tabmenu" type="radio">
-                    <label for="menu-how" class="tab-item">操作方法</label>
+                    <label for="menu-how" class="tab-item NotSelectable">操作方法</label>
                     <div class="tab-content">
                         <p>左クリック: トレース</br>
                             マウス中ボタン: 移動</br>
@@ -48,29 +48,25 @@
                     </div>
 
                     <input id="menu-config" class="tab-input" name="tabmenu" type="radio">
-                    <label for="menu-config" class="tab-item">設定</label>
+                    <label for="menu-config" class="tab-item NotSelectable">設定</label>
                     <div class="tab-content">
                         <table>
-                            <!-- <tr>
-                                <td><input type="checkbox" id="isSetColor"></td>
-                                <td> <label for="isSetColor">自動選択時、色をコードに含める</label></td>
-                            </tr> -->
                             <tr>
                                 <td><input type="checkbox" id="isFill" class="RefreshSrc" checked></td>
-                                <td><label for="isFill">drawRectFを用いる</label></td>
+                                <td><label for="isFill" class="NotSelectable">drawRectFを用いる</label></td>
                             </tr>
                             <tr>
                                 <td> <input type="checkbox" id="isSetColor" class="RefreshSrc" checked> </td>
-                                <td> <label for="isSetColor">色をつける(自動選択時のみ)</label> </td>
+                                <td> <label for="isSetColor" class="NotSelectable">色をつける(自動選択時のみ)</label> </td>
                             </tr>
                             <tr>
                                 <td> <input type="checkbox" id="isUseGamma" class="RefreshSrc"> </td>
-                                <td> <label for="isUseGamma">色を補正(ガンマ補正)</label> </td>
+                                <td> <label for="isUseGamma" class="NotSelectable">色を補正(ガンマ補正)</label> </td>
                             </tr>
 
                             <tr>
                                 <td><input type="checkbox" id="isGenMiniCode" class="RefreshSrc"></input></td>
-                                <td> <label for="isGenMiniCode">最適化されたコードを出力</label> </td>
+                                <td> <label for="isGenMiniCode" class="NotSelectable">最適化されたコードを出力</label> </td>
                             </tr>
 
                             <tr>

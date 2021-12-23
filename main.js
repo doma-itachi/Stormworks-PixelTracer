@@ -255,7 +255,7 @@ function mouseReleased(){
     mouse.dragging=false;
 }
 function zoom(event){
-    if(event.deltaY!=0){
+    if(event.deltaY!=0 && core.image!==null){
         if(event.deltaY>0)
             core.zoom-=2;
         else
@@ -271,7 +271,10 @@ function setInfo(){
 function SetSource(){
     source=getSource();
     textAreaElement.value=source;
-    charCountElement.textContent=`${source.length}/${maxCharacter}`
+
+    //文字最大数を超えていた場合警告を表示する
+    document.getElementById("charCount").style.color=`${source.length>maxCharacter?"#FF0000":"#000000"}`;
+    charCountElement.textContent=`${source.length}/${maxCharacter}`;
 
 }
 function getSource(){
@@ -322,6 +325,7 @@ function enableAutoTraceMode(){
 
 function clearItems(){
     core.rects=new Array();
+    SetSource();
 }
 
 function reset(){

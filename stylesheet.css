@@ -87,6 +87,11 @@ textarea{
     resize: none;
     grid-row: 2;
     outline: none;
+    border: none;
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
 }
 
 .bottomMenuDiv{
@@ -156,4 +161,7 @@ input[type="radio"]{
 }
 .Author{
     font-size: 12pt;
+}
+.NotSelectable{
+    user-select: none;
 }
