@@ -54,6 +54,12 @@ function setup(){
         elm.addEventListener("change", this.SetSource);
     });
 
+    //ドラッグアンドドロップ
+    let elm=document.querySelector(".wrapper");
+    elm.addEventListener("dragenter",dragenter, false);
+    elm.addEventListener("dragover",dragover, false);
+    elm.addEventListener("drop",drop, false);
+
     //復帰
     storageMgr=new StorageManager();
     storageMgr.logElement=logElement;
@@ -170,6 +176,8 @@ function keyPressed(){
     }
 }
 function ImageSelected(file){//画像のロード
+    console.log(file);
+
     if(file.type==="image"){
         temp=createImg(file.data,"","",async()=>{
             await(3000);
@@ -331,6 +339,30 @@ function clearItems(){
 
 function reset(){
     storageMgr.reset();
+}
+
+function dragenter(e){
+    e.stopPropagation();
+    e.preventDefault();
+}
+function dragover(e){
+    e.stopPropagation();
+    e.preventDefault();
+}
+
+let foo=null;
+function drop(e){
+    e.stopPropagation();
+    e.preventDefault();
+
+    //fileReader
+    let fileReader=new FileReader();
+    fileReader.readAsDataURL(e.dataTransfer.files[0]);
+    foo=new p5.File(e.dataTransfer.files[0]);
+    fileReader.onload=function(event){
+        foo.data=event.target.result;
+        ImageSelected(foo);
+    }
 }
 
 class Core{
