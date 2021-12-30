@@ -244,7 +244,8 @@ function mouseDragged(){
 
 function mouseReleased(){
     if(mouse.selecting){
-        if(0<=mouse.selectEndPixel.x && mouse.selectEndPixel.x<=core.image.width && 0<=mouse.selectEndPixel.y && mouse.selectEndPixel.y<=core.image.height){
+        if(0<=mouse.selectEndPixel.x && mouse.selectEndPixel.x<=core.image.width && 0<=mouse.selectEndPixel.y && mouse.selectEndPixel.y<=core.image.height
+            && (mouse.selectEndPixel.x-mouse.selectStartPixel.x+1)!=0 && (mouse.selectEndPixel.y-mouse.selectStartPixel.y+1)!=0){
             core.rects.push(new Rect(mouse.selectStartPixel.x,mouse.selectStartPixel.y,mouse.selectEndPixel.x-mouse.selectStartPixel.x+1,mouse.selectEndPixel.y-mouse.selectStartPixel.y+1));
         }
         
