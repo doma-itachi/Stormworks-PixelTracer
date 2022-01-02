@@ -82,7 +82,7 @@ function windowResized(){
     resizeCanvas(wrapperDiv.clientWidth,wrapperDiv.clientHeight);
 }
 function draw(){
-    background(0,0,0);
+    background("#262626");
     if(isMenuVisible){
         noSmooth();
         if(core.image!==null){
@@ -194,6 +194,7 @@ function ImageSelected(file){//画像のロード
         core=new Core();
         core.imageData=file.data;
         core.loadImage();
+        windowResized();
         });
     }
 }
@@ -282,7 +283,7 @@ function SetSource(){
     textAreaElement.value=source;
 
     //文字最大数を超えていた場合警告を表示する
-    document.getElementById("charCount").style.color=`${source.length>maxCharacter?"#FF0000":"#000000"}`;
+    document.getElementById("charCount").style.color=`${source.length>maxCharacter?"#ff3333":"white"}`;
     charCountElement.textContent=`${source.length}/${maxCharacter}`;
 
 }
