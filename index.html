@@ -8,8 +8,8 @@
         <meta name="twitter:title" content="Stormworks PixelTracer">
 
         <link rel="icon" href="./img/favicon256.png">
-        <link rel="stylesheet" href="https://doma-itachi.github.io/Stormworks-PixelTracer/stylesheet.css?ver=1"/>
-        <!-- <link rel="stylesheet" href="./stylesheet.css"/> -->
+        <!-- <link rel="stylesheet" href="https://doma-itachi.github.io/Stormworks-PixelTracer/stylesheet.css?ver=1"/> -->
+        <link rel="stylesheet" href="./stylesheet.css"/>
 
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +22,11 @@
     <body>
         <div class="wrapper">
             <div class="menu" id="menu">
-                <p id="Title">Stormworks PixelTracer v1.2</p>
+                <div id="Title" class="NotSelectable">
+                    <span id="mainTitle">PixelTracer v2.0</span><br>
+                    <span id="subTitle">for Stormworks</span>
+                </div>
+                
                 <div id="inputBox"></div>
                 <button id="AutoSelectButton">自動で選択する</button>
                 <button id="saveButton">保存</button>
@@ -35,12 +39,12 @@
                     <input id="menu-info" class="tab-input" name="tabmenu" type="radio" checked="checked">
                     <label for="menu-info" class="tab-item NotSelectable">情報</label>
                     <div class="tab-content">
-                        <p id="information"></p>
+                        <p id="information" class="NotSelectable"></p>
                     </div>
                     
                     <input id="menu-how" class="tab-input" name="tabmenu" type="radio">
                     <label for="menu-how" class="tab-item NotSelectable">操作方法</label>
-                    <div class="tab-content">
+                    <div class="tab-content NotSelectable">
                         <p>左クリック: トレース</br>
                             マウス中ボタン: 移動</br>
                             マウスホイール: 拡大縮小</br>
@@ -57,16 +61,16 @@
                             </tr>
                             <tr>
                                 <td> <input type="checkbox" id="isSetColor" class="RefreshSrc" checked> </td>
-                                <td> <label for="isSetColor" class="NotSelectable">色をつける(自動選択時のみ)</label> </td>
+                                <td> <label for="isSetColor" class="NotSelectable">色をつける</label> </td>
                             </tr>
                             <tr>
                                 <td> <input type="checkbox" id="isUseGamma" class="RefreshSrc"> </td>
-                                <td> <label for="isUseGamma" class="NotSelectable">色を補正(ガンマ補正)</label> </td>
+                                <td> <label for="isUseGamma" class="NotSelectable">色補正(ガンマ補正)</label> </td>
                             </tr>
 
                             <tr>
                                 <td><input type="checkbox" id="isGenMiniCode" class="RefreshSrc"></input></td>
-                                <td> <label for="isGenMiniCode" class="NotSelectable">最適化されたコードを出力</label> </td>
+                                <td> <label for="isGenMiniCode" class="NotSelectable">コードを最適化</label> </td>
                             </tr>
 
                             <tr>
