@@ -70,7 +70,7 @@ function setup(){
     storageMgr=new StorageManager();
     storageMgr.logElement=logElement;
     if(storageMgr.exist())storageMgr.load();
-
+    core.layerMgr.addLayer();
     //イベント
     canvas.mouseWheel(zoom);
 
@@ -392,9 +392,12 @@ function SetLayerToDOM(){
 
 class LayerMgr{
     constructor(){
-        this.DOMtemp=`<div class="layer_item">アイテム</div>`;
-
         this.layers=new Array();
+        this.selectedLayerIndex=null;
+
+        //一時
+        this.layerName="レイヤー1"
+        this.objectTotal=24;
     }
     addLayer(){
         this.layers.push(new Layer());
@@ -405,11 +408,22 @@ class LayerMgr{
 
         layerDiv.innerHTML="";
 
-        //サイズを設定
-        // layerDiv.style.height=`${layerDiv.clientHeight-1}px`;
-
         for(let i=0;i<this.layers.length;i++){
-            layerDiv.innerHTML+=this.DOMtemp;
+            this.layerName=this.layers[i].name;
+            this.objectTotal=this.layers[i].rects.length;
+
+            layerDiv.innerHTML+=`<div class="layer_item">
+            <div class="borderInGrid"></div>
+            <label class="visibilityLabel" title="表示・非表示">
+                <input type="checkbox" checked>
+                <div></div>
+            </label>
+            <p class="LayerName NotSelectable">${this.layerName}</p>
+            <div class="LayerDetail">
+                <p>${this.objectTotal}アイテム</p>
+            </div>
+            <div class="LayerColor" title="クリックで色を変更"></div>
+        </div>`;
         }
     }
 }
@@ -641,12 +655,12 @@ function easeOutExpo(x){
 
 class Layer{
     constructor(){
-        this.name;
-        this.id;
-        this.rects;
-        this.r;
-        this.g;
-        this.b;
-        this.visible;
+        this.name="仮置き";
+        this.id=null;
+        this.rects=new Array();
+        this.r=120;
+        this.g=120;
+        this.b=120;
+        this.visible=true;
     }
 }

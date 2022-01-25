@@ -17,7 +17,7 @@
     font-family: 'M PLUS 2', sans-serif;
 }
 body{
-    max-height: 100vh;
+    max-height: 100%;
     margin: 0;
     padding: 0%;
 }
@@ -47,7 +47,6 @@ body{
     font-size: 30px;
 }
 #subTitle{
-    /* font-style: italic; */
     line-height: 0%;
     font-size: 20px;
 }
@@ -90,14 +89,13 @@ canvas{
 
 .wrapper{
     height: 100vh;
-    max-height: 100vh;
+    /* max-height: 100vh; */
     display: grid;
     grid-template-columns: 6fr minmax(300px, 2fr);
     grid-template-rows: var(--header-height) auto;
 }
 
 .leftMenu{
-    /* border-left: 2px solid var(--border); */
     background-color: #424242;
     width: 100%;
     height: 100%;
@@ -132,8 +130,8 @@ textarea::-webkit-scrollbar-thumb,
 }
 
 .bottomMenuDiv{
-    /* margin-top: auto;
-    margin-bottom: auto; */
+    margin-top: auto;
+    margin-bottom: auto;
     margin-left: 6px;
     height: var(--bottomMenu-height);
     margin-right: 4px;
@@ -159,7 +157,6 @@ input[type="radio"]{
 .tab {
     display: flex;
     flex-flow: wrap;
-    /* justify-content: start; */
     align-content:flex-start;
     height: 100%;
     grid-row: 1;
@@ -172,12 +169,10 @@ input[type="radio"]{
     display: block;
     flex-grow: 1;
     text-align: center;
-    /* height: fit-content; */
     padding: 3px 0;
     cursor: pointer;
     order: -1;
     border: 1px solid var(--border);
-    /* flex: 1 1 auto; */
 }
 
 .tab-item:not(:first-of-type){
@@ -196,12 +191,8 @@ input[type="radio"]{
     width: 100%;
     height: auto;
     display: none;
-    overflow: hidden;
-    /* justify-content: center; */
-    /* align-items: center; */
     flex-direction: column;
     font-size: 20px;
-    /* flex-grow: 1; */
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
 }
@@ -233,12 +224,9 @@ a:visited{
 /* レイヤー関連 */
 .layerContainer{
     display: flex;
-    /* flex-grow: 100; */
-    /* height: 100%; */
     flex-direction: column;
     flex: 1 1 0;
     overflow-y: auto;
-    grid-row: 2;
 }
 .layerTabHeight{
     height: calc(100% - var(--bottomMenu-height));
@@ -271,4 +259,55 @@ a:visited{
 #removeLayer{
     background-image: url("./img/icon/delete.svg");
     grid-column: 3;
+}
+
+/* レイヤーアイテム */
+.layer_item{
+    height: 80px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+
+    display: grid;
+    grid-template-columns: 30px 1fr 20px;
+    grid-template-rows: 1fr 1fr;
+}
+/* 可視性 */
+.borderInGrid{
+    grid-column: 1;
+    grid-row: 1/3;
+    border-right: 1px solid var(--border);
+}
+.visibilityLabel{
+    margin: auto;
+    grid-column: 1;
+    grid-row: 1/3;
+}
+.visibilityLabel>input{
+    display:none;
+}
+.visibilityLabel>div{
+    width: 20px;
+    height: 20px;
+    background: center;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    background-image: url("./img/icon/visibility_off.svg");
+}
+
+.visibilityLabel>input[type=checkbox]:checked+div{
+    background-image: url("./img/icon/visibility.svg");
+}
+.LayerName{
+    margin-left: 10px;
+}
+.LayerDetail{
+    margin-left: 10px;
+    grid-column: 2;
+    grid-row: 2;
+}
+.LayerColor{
+    grid-column: 3;
+    grid-row: 1/3;
+    background-color: red;
 }
