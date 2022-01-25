@@ -1,9 +1,13 @@
 :root{
+    --layer-selected: #6b6b6b;
     --left-menu-back: #535353;
+    --layerCtrl-back: #4d4d4d;
     --border: #333333;
     --unselectable-color: #a0a0a0;
     --selecting-color: #f0f0f0;
     --text-color: #dadada;
+    --header-height: 50px;
+    --bottomMenu-height: 40px;
 }
 
 *{
@@ -12,12 +16,8 @@
 
     font-family: 'M PLUS 2', sans-serif;
 }
-html{
-    height: 100%;
-}
-
 body{
-    height: 100%;
+    max-height: 100vh;
     margin: 0;
     padding: 0%;
 }
@@ -30,7 +30,7 @@ body{
     grid-column: 1/3;
     grid-row: 1;
     width: 100%;
-    height: 100%;
+    height: var(--header-height);
 }
 .menu>#Title{
     grid-column: 1;
@@ -89,22 +89,22 @@ canvas{
 }
 
 .wrapper{
-    height: 100%;
+    height: 100vh;
+    max-height: 100vh;
     display: grid;
-    /* grid-template-columns: 6fr 2fr; */
-    /* grid-template-columns: 2fr 400px; */
     grid-template-columns: 6fr minmax(300px, 2fr);
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: var(--header-height) auto;
 }
 
 .leftMenu{
     /* border-left: 2px solid var(--border); */
     background-color: #424242;
     width: 100%;
+    height: 100%;
     grid-column: 2/3;
     grid-row: 2;
-    display: grid;
-    grid-template-rows: auto 7fr 32px;
+    display: flex;
+    flex-direction: column;
 }
 textarea{
     cursor: auto;
@@ -113,34 +113,35 @@ textarea{
     resize: none;
     grid-row: 2;
     outline: none;
-    border: 1px solid var(--border);
+    border: none;
 }
-textarea::-webkit-scrollbar{
-    
+textarea::-webkit-scrollbar,
+ .layerContainer::-webkit-scrollbar{
     width: 16px;
     background-color: black;
 }
-textarea::-webkit-scrollbar-track{
+textarea::-webkit-scrollbar-track,
+ .layerContainer::-webkit-scrollbar-track{
     background-color: #4a4a4a;
     border-left: 1px solid var(--border);
 }
-textarea::-webkit-scrollbar-thumb{
+textarea::-webkit-scrollbar-thumb,
+ .layerContainer::-webkit-scrollbar-thumb{
     background-color: #696969;
     border-left: 1px solid var(--border);
 }
 
 .bottomMenuDiv{
-    grid-row: 3;
-    margin-top: auto;
-    margin-bottom: auto;
+    /* margin-top: auto;
+    margin-bottom: auto; */
     margin-left: 6px;
+    height: var(--bottomMenu-height);
     margin-right: 4px;
 }
 
 #clipBoard{
     float: right;
     width: auto;
-
     padding-top: 2px;
     padding-bottom: 2px;
     padding-left: 10px;
@@ -158,23 +159,25 @@ input[type="radio"]{
 .tab {
     display: flex;
     flex-flow: wrap;
+    /* justify-content: start; */
+    align-content:flex-start;
+    height: 100%;
     grid-row: 1;
 }
-
+.core-tab{
+    height: auto;
+}
 .tab-item{
     color: var(--unselectable-color);
     display: block;
     flex-grow: 1;
     text-align: center;
+    /* height: fit-content; */
     padding: 3px 0;
     cursor: pointer;
     order: -1;
-    height: auto;
-
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
+    border: 1px solid var(--border);
+    /* flex: 1 1 auto; */
 }
 
 .tab-item:not(:first-of-type){
@@ -187,17 +190,18 @@ input[type="radio"]{
     color: var(--selecting-color);
     border-bottom: 0px;
 }
-
 .tab-content{
     background-color: var(--left-menu-back);
     color: var(--text-color);
     width: 100%;
     height: auto;
     display: none;
+    overflow: hidden;
     /* justify-content: center; */
     /* align-items: center; */
+    flex-direction: column;
     font-size: 20px;
-    
+    /* flex-grow: 1; */
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
 }
@@ -224,4 +228,47 @@ a{
 }
 a:visited{
     color: var(--text-color);
+}
+
+/* レイヤー関連 */
+.layerContainer{
+    display: flex;
+    /* flex-grow: 100; */
+    /* height: 100%; */
+    flex-direction: column;
+    flex: 1 1 0;
+    overflow-y: auto;
+    grid-row: 2;
+}
+.layerTabHeight{
+    height: calc(100% - var(--bottomMenu-height));
+}
+.layerCtrl{
+    display: grid;
+    grid-template-columns: auto 30px 30px 10px;
+    height: 30px;
+    background-color: var(--layerCtrl-back);
+    border-top: 1px solid var(--border);
+}
+.layerCtrl>button{
+    display: inline-block;
+    margin: 2px;
+    border: none;
+    background: center;
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    fill: var(--border);
+    border-radius: 3px;
+}
+.layerCtrl>button:hover{
+    background-color: var(--border);
+}
+#addLayer{
+    background-image: url("./img/icon/note_add.svg");
+    grid-column: 2;
+}
+#removeLayer{
+    background-image: url("./img/icon/delete.svg");
+    grid-column: 3;
 }

@@ -49,10 +49,16 @@ function setup(){
     document.querySelector("#clearButton").addEventListener("click", this.clearItems);
     document.querySelector("#resetButton").addEventListener("click", this.reset);
 
+    //レイヤー関連ボタン
+    document.querySelector("#addLayer").addEventListener("click", this.addLayer);
+
     //---
     document.querySelectorAll(".RefreshSrc").forEach(function (elm){
         elm.addEventListener("change", this.SetSource);
     });
+    document.querySelectorAll(".RfrScrInBtn").forEach(function (elm){
+        elm.addEventListener("click", this.windowResized);
+    })
 
     //ドラッグアンドドロップ
     let elm=document.querySelector(".wrapper");
@@ -70,16 +76,26 @@ function setup(){
 
     mouse=new Mouse();
 
-    windowResized();
+    
     background("#333333");
 
     SetSource();
-}
 
+    windowResized();
+}
+window.onload=function(){windowResized();}
 function windowResized(){
     resizeCanvas(1,1);
+    
+    // let layerDiv=document.querySelector(".layerDiv");
+
+    // layerDiv.innerHTML="";
+    // //サイズを設定
+    // layerDiv.style.height=`auto`;
+
     var wrapperDiv=document.getElementById("wrapper");
     resizeCanvas(wrapperDiv.clientWidth,wrapperDiv.clientHeight);
+    // core.layerMgr.setToDOM();
 }
 function draw(){
     background("#262626");
@@ -366,6 +382,38 @@ function drop(e){
     }
 }
 
+//レイヤー
+function addLayer(){
+    core.layerMgr.addLayer();
+}
+function SetLayerToDOM(){
+
+}
+
+class LayerMgr{
+    constructor(){
+        this.DOMtemp=`<div class="layer_item">アイテム</div>`;
+
+        this.layers=new Array();
+    }
+    addLayer(){
+        this.layers.push(new Layer());
+        this.setToDOM();
+    }
+    setToDOM(){
+        let layerDiv=document.querySelector(".layerContainer");
+
+        layerDiv.innerHTML="";
+
+        //サイズを設定
+        // layerDiv.style.height=`${layerDiv.clientHeight-1}px`;
+
+        for(let i=0;i<this.layers.length;i++){
+            layerDiv.innerHTML+=this.DOMtemp;
+        }
+    }
+}
+
 class Core{
     constructor(){
         this.posX=0;
@@ -381,6 +429,9 @@ class Core{
         this.isUseGamma=false;
         this.isGenMiniCode=false;
 
+
+        // this.Layers=new Array();
+        this.layerMgr=new LayerMgr();
         this.rects=new Array();
     }
     loadImage(){
@@ -587,3 +638,15 @@ class RGB{
 function easeOutExpo(x){
     return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
     }
+
+class Layer{
+    constructor(){
+        this.name;
+        this.id;
+        this.rects;
+        this.r;
+        this.g;
+        this.b;
+        this.visible;
+    }
+}

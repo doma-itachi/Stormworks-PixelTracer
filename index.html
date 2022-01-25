@@ -11,6 +11,8 @@
         <!-- <link rel="stylesheet" href="https://doma-itachi.github.io/Stormworks-PixelTracer/stylesheet.css?ver=1"/> -->
         <link rel="stylesheet" href="./stylesheet.css"/>
 
+        <!-- プリロード -->
+        <link rel="preload" href="./img/icon/visibility_off.svg" as="image">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,15 +37,15 @@
             <div class="canvas" id="wrapper"></div>
 
             <div class="leftMenu">
-                <div class="tab">
+                <div class="tab core-tab">
                     <input id="menu-info" class="tab-input" name="tabmenu" type="radio" checked="checked">
-                    <label for="menu-info" class="tab-item NotSelectable">情報</label>
+                    <label for="menu-info" class="tab-item NotSelectable RfrScrInBtn">情報</label>
                     <div class="tab-content">
                         <p id="information" class="NotSelectable"></p>
                     </div>
                     
                     <input id="menu-how" class="tab-input" name="tabmenu" type="radio">
-                    <label for="menu-how" class="tab-item NotSelectable">操作方法</label>
+                    <label for="menu-how" class="tab-item NotSelectable RfrScrInBtn">操作方法</label>
                     <div class="tab-content NotSelectable">
                         <p>左クリック: トレース</br>
                             マウス中ボタン: 移動</br>
@@ -52,7 +54,7 @@
                     </div>
 
                     <input id="menu-config" class="tab-input" name="tabmenu" type="radio">
-                    <label for="menu-config" class="tab-item NotSelectable">設定</label>
+                    <label for="menu-config" class="tab-item NotSelectable RfrScrInBtn">設定</label>
                     <div class="tab-content">
                         <table>
                             <tr>
@@ -97,7 +99,23 @@
                     </div>
                 </div>
 
-                <textarea id="sources" spellcheck="false" readonly></textarea>
+                <div class="tab">
+                    <input type="radio" class="tab-input" id="tab_source" name="layerTab" checked>
+                    <label for="tab_source" class="tab-item NotSelectable">ソース</label>
+                    <textarea id="sources" class="tab-content layerTabHeight" spellcheck="false" readonly></textarea>
+
+                    <input type="radio" class="tab-input" id="tab_layer" name="layerTab">
+                    <label for="tab_layer" class="tab-item NotSelectable">レイヤー</label>
+                    <div class="tab-content layerTabHeight">
+                        <div class="layerContainer">
+                        </div>
+                        <div class="layerCtrl">
+                            <button id="addLayer" title="レイヤーを追加"></button>
+                            <button id="removeLayer" title="レイヤーを削除"></button>
+                        </div>
+                        
+                    </div>
+                </div>
 
                 <div class="bottomMenuDiv">
                     <p id="charCount" style="display: inline;"></p>
