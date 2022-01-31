@@ -583,7 +583,7 @@ class LayerMgr{
             layerDiv.innerHTML+=`<div class="layer_item" id="${i}" ${i==this.selectedLayerIndex ? 'data-selected="true"' : ""} draggable="true">
             <div class="borderInGrid"></div>
             <label class="visibilityLabel" title="表示・非表示">
-                <input type="checkbox" class="visibleChk" checked>
+                <input type="checkbox" class="visibleChk" ${this.layers[i].visible?"checked":""}>
                 <div></div>
             </label>
             <p class="LayerName NotSelectable" title="レイヤー名を変更...">${this.layerName}</p>
@@ -673,6 +673,11 @@ class Core{
 
     addRect(x, y, sx, sy){
         if(this.layerMgr.selectedLayerIndex!=null)this.layerMgr.layers[this.layerMgr.selectedLayerIndex].rects.push(new Rect(x, y, sx, sy));
+        else{
+            if(this.layerMgr.layers.length==0)overlayMsg.set("レイヤーがありません。レイヤーを新規作成してください");
+            else overlayMsg.set("レイヤーが選択されていません");
+        }
+
         this.layerMgr.setToDOM();//パフォーマンス落ちる可能性あり
     }
     cleanUp(){

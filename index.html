@@ -4,12 +4,12 @@
         <title>Stormworks PixelTracer</title>
 
         <meta charset="utf-8">
-        <meta name="description" content="ドット画像から文字などを自動で抽出し、ゲーム「Stormworks: Build and Rescue」内のモニター用のluaコードを生成できます。モニターへ日本語を表示したりできます。">
+        <meta name="description" content="ドット画像から文字などを自動で抽出し、ゲーム「Stormworks: Build and Rescue」内のディスプレイ用のluaコードを生成できます。ディスプレイへ日本語を表示したりできます。">
         <meta name="twitter:title" content="Stormworks PixelTracer">
 
         <link rel="icon" href="./img/favicon256.png">
-        <!-- <link rel="stylesheet" href="https://doma-itachi.github.io/Stormworks-PixelTracer/stylesheet.css?ver=1"/> -->
-        <link rel="stylesheet" href="./stylesheet.css"/>
+        <link rel="stylesheet" href="https://doma-itachi.github.io/Stormworks-PixelTracer/stylesheet.css?ver=2"/>
+        <!-- <link rel="stylesheet" href="./stylesheet.css"/> -->
 
         <!-- プリロード -->
         <link rel="preload" href="./img/icon/visibility_off.svg" as="image">
@@ -19,6 +19,16 @@
         <link href="https://fonts.googleapis.com/css2?family=M+PLUS+2&display=swap" rel="stylesheet">
 
         <meta name="google-site-verification" content="2p0qsvGzCbCG8xWL3oi36s6UsiIsUDU2fkmjvelP9Yc" />
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QE2B88BNP0"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-QE2B88BNP0');
+        </script>
     </head>
 
     <body>
@@ -96,11 +106,11 @@
                 </div>
 
                 <div class="tab">
-                    <input type="radio" class="tab-input" id="tab_source" name="layerTab">
+                    <input type="radio" class="tab-input" id="tab_source" name="layerTab" checked>
                     <label for="tab_source" class="tab-item NotSelectable">ソース</label>
                     <textarea id="sources" class="tab-content layerTabHeight" spellcheck="false" readonly></textarea>
 
-                    <input type="radio" class="tab-input" id="tab_layer" name="layerTab" checked>
+                    <input type="radio" class="tab-input" id="tab_layer" name="layerTab">
                     <label for="tab_layer" class="tab-item NotSelectable">レイヤー</label>
                     <div class="tab-content layerTabHeight">
                         <div class="layerContainer" id="layerContainer">
@@ -118,7 +128,7 @@
                 </div>
 
                 <div class="bottomMenuDiv">
-                    <p id="charCount" style="display: inline;"></p>
+                    <p id="charCount" class="NotSelectable" style="display: inline;"></p>
                     <button id="clipBoard">クリップボードにコピー</button>
                 </div>
             </div>
