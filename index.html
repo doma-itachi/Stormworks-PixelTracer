@@ -4,19 +4,31 @@
         <title>Stormworks PixelTracer</title>
 
         <meta charset="utf-8">
-        <meta name="description" content="ドット画像から文字などを自動で抽出し、ゲーム「Stormworks: Build and Rescue」内のモニター用のluaコードを生成できます。モニターへ日本語を表示したりできます。">
+        <meta name="description" content="ドット画像から文字などを自動で抽出し、ゲーム「Stormworks: Build and Rescue」内のディスプレイ用のluaコードを生成できます。ディスプレイへ日本語を表示したりできます。">
         <meta name="twitter:title" content="Stormworks PixelTracer">
 
         <link rel="icon" href="./img/favicon256.png">
-        <!-- <link rel="stylesheet" href="https://doma-itachi.github.io/Stormworks-PixelTracer/stylesheet.css?ver=1"/> -->
-        <link rel="stylesheet" href="./stylesheet.css"/>
+        <link rel="stylesheet" href="https://doma-itachi.github.io/Stormworks-PixelTracer/stylesheet.css?ver=2"/>
+        <!-- <link rel="stylesheet" href="./stylesheet.css"/> -->
 
+        <!-- プリロード -->
+        <link rel="preload" href="./img/icon/visibility_off.svg" as="image">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=M+PLUS+2&display=swap" rel="stylesheet">
 
         <meta name="google-site-verification" content="2p0qsvGzCbCG8xWL3oi36s6UsiIsUDU2fkmjvelP9Yc" />
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QE2B88BNP0"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-QE2B88BNP0');
+        </script>
     </head>
 
     <body>
@@ -35,15 +47,15 @@
             <div class="canvas" id="wrapper"></div>
 
             <div class="leftMenu">
-                <div class="tab">
+                <div class="tab core-tab">
                     <input id="menu-info" class="tab-input" name="tabmenu" type="radio" checked="checked">
-                    <label for="menu-info" class="tab-item NotSelectable">情報</label>
+                    <label for="menu-info" class="tab-item NotSelectable RfrScrInBtn">情報</label>
                     <div class="tab-content">
                         <p id="information" class="NotSelectable"></p>
                     </div>
                     
                     <input id="menu-how" class="tab-input" name="tabmenu" type="radio">
-                    <label for="menu-how" class="tab-item NotSelectable">操作方法</label>
+                    <label for="menu-how" class="tab-item NotSelectable RfrScrInBtn">操作方法</label>
                     <div class="tab-content NotSelectable">
                         <p>左クリック: トレース</br>
                             マウス中ボタン: 移動</br>
@@ -52,7 +64,7 @@
                     </div>
 
                     <input id="menu-config" class="tab-input" name="tabmenu" type="radio">
-                    <label for="menu-config" class="tab-item NotSelectable">設定</label>
+                    <label for="menu-config" class="tab-item NotSelectable RfrScrInBtn">設定</label>
                     <div class="tab-content">
                         <table>
                             <tr>
@@ -75,7 +87,7 @@
 
                             <tr>
                                 <td></td>
-                                <td> <button id="clearButton">選択範囲をすべて削除</button> </td>
+                                <td> <button id="clearButton">選択レイヤの選択範囲をすべて削除</button> </td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -89,18 +101,34 @@
                                 <td></td>
                                 <td class="Author"> Twitter: <a href="https://twitter.com/itachi_yukari" target="_blank">@itachi_yukari</a> </td>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td class="Author">バグ報告＆要望はDMまで</td>
-                            </tr>
                         </table>
                     </div>
                 </div>
 
-                <textarea id="sources" spellcheck="false" readonly></textarea>
+                <div class="tab">
+                    <input type="radio" class="tab-input" id="tab_source" name="layerTab" checked>
+                    <label for="tab_source" class="tab-item NotSelectable">ソース</label>
+                    <textarea id="sources" class="tab-content layerTabHeight" spellcheck="false" readonly></textarea>
+
+                    <input type="radio" class="tab-input" id="tab_layer" name="layerTab">
+                    <label for="tab_layer" class="tab-item NotSelectable">レイヤー</label>
+                    <div class="tab-content layerTabHeight">
+                        <div class="layerContainer" id="layerContainer">
+                        </div>
+                        <div class="layerCtrl">
+                            <div>
+                                <input id="preview" type="checkbox" class="RefreshSrc">
+                                <label for="preview" class="NotSelectable">プレビュー</label>
+                            </div>
+                            <button id="addLayer" title="レイヤーを追加"></button>
+                            <button id="removeLayer" title="レイヤーを削除"></button>
+                        </div>
+                        
+                    </div>
+                </div>
 
                 <div class="bottomMenuDiv">
-                    <p id="charCount" style="display: inline;"></p>
+                    <p id="charCount" class="NotSelectable" style="display: inline;"></p>
                     <button id="clipBoard">クリップボードにコピー</button>
                 </div>
             </div>

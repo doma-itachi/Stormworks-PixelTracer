@@ -1,9 +1,13 @@
 :root{
+    --layer-selected: #6b6b6b;
     --left-menu-back: #535353;
+    --layerCtrl-back: #4d4d4d;
     --border: #333333;
     --unselectable-color: #a0a0a0;
     --selecting-color: #f0f0f0;
     --text-color: #dadada;
+    --header-height: 50px;
+    --bottomMenu-height: 40px;
 }
 
 *{
@@ -12,12 +16,8 @@
 
     font-family: 'M PLUS 2', sans-serif;
 }
-html{
-    height: 100%;
-}
-
 body{
-    height: 100%;
+    max-height: 100%;
     margin: 0;
     padding: 0%;
 }
@@ -30,7 +30,7 @@ body{
     grid-column: 1/3;
     grid-row: 1;
     width: 100%;
-    height: 100%;
+    height: var(--header-height);
 }
 .menu>#Title{
     grid-column: 1;
@@ -47,8 +47,6 @@ body{
     font-size: 30px;
 }
 #subTitle{
-    /* margin-left: 60px; */
-    /* font-style: italic; */
     line-height: 0%;
     font-size: 20px;
 }
@@ -90,22 +88,21 @@ canvas{
 }
 
 .wrapper{
-    height: 100%;
+    height: 100vh;
+    /* max-height: 100vh; */
     display: grid;
-    /* grid-template-columns: 6fr 2fr; */
-    /* grid-template-columns: 2fr 400px; */
     grid-template-columns: 6fr minmax(300px, 2fr);
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: var(--header-height) auto;
 }
 
 .leftMenu{
-    /* border-left: 2px solid var(--border); */
     background-color: #424242;
     width: 100%;
+    height: 100%;
     grid-column: 2/3;
     grid-row: 2;
-    display: grid;
-    grid-template-rows: auto 7fr 32px;
+    display: flex;
+    flex-direction: column;
 }
 textarea{
     cursor: auto;
@@ -114,38 +111,37 @@ textarea{
     resize: none;
     grid-row: 2;
     outline: none;
-    border: 1px solid var(--border);
-    /* border-top: 1px solid #333333;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-    border-bottom: 1px solid gray; */
+    border: none;
 }
-textarea::-webkit-scrollbar{
-    
+textarea::-webkit-scrollbar,
+ .layerContainer::-webkit-scrollbar{
     width: 16px;
     background-color: black;
 }
-textarea::-webkit-scrollbar-track{
+textarea::-webkit-scrollbar-track,
+ .layerContainer::-webkit-scrollbar-track{
     background-color: #4a4a4a;
     border-left: 1px solid var(--border);
 }
-textarea::-webkit-scrollbar-thumb{
-    background-color: #696969;
+textarea::-webkit-scrollbar-thumb,
+ .layerContainer::-webkit-scrollbar-thumb{
+    background-color: #696969;;
     border-left: 1px solid var(--border);
 }
 
 .bottomMenuDiv{
-    grid-row: 3;
     margin-top: auto;
     margin-bottom: auto;
     margin-left: 6px;
     margin-right: 4px;
+    height: var(--bottomMenu-height);
+    
+    /* border-top: 1px solid var(--border); */
 }
 
 #clipBoard{
     float: right;
     width: auto;
-
     padding-top: 2px;
     padding-bottom: 2px;
     padding-left: 10px;
@@ -163,9 +159,13 @@ input[type="radio"]{
 .tab {
     display: flex;
     flex-flow: wrap;
+    align-content:flex-start;
+    height: 100%;
     grid-row: 1;
 }
-
+.core-tab{
+    height: auto;
+}
 .tab-item{
     color: var(--unselectable-color);
     display: block;
@@ -174,12 +174,7 @@ input[type="radio"]{
     padding: 3px 0;
     cursor: pointer;
     order: -1;
-    height: auto;
-
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
+    border: 1px solid var(--border);
 }
 
 .tab-item:not(:first-of-type){
@@ -192,17 +187,14 @@ input[type="radio"]{
     color: var(--selecting-color);
     border-bottom: 0px;
 }
-
 .tab-content{
     background-color: var(--left-menu-back);
     color: var(--text-color);
     width: 100%;
     height: auto;
     display: none;
-    /* justify-content: center; */
-    /* align-items: center; */
+    flex-direction: column;
     font-size: 20px;
-    
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
 }
@@ -229,4 +221,126 @@ a{
 }
 a:visited{
     color: var(--text-color);
+}
+
+/* レイヤー関連 */
+.layerContainer{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    overflow-y: auto;
+}
+.layerTabHeight{
+    height: calc(100% - var(--bottomMenu-height));
+}
+.layerCtrl{
+    display: grid;
+    grid-template-columns: auto 30px 30px 10px;
+    height: 30px;
+    background-color: var(--layerCtrl-back);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+.layerCtrl>button{
+    display: inline-block;
+    margin: 2px;
+    border: none;
+    background: center;
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    fill: var(--border);
+    border-radius: 3px;
+}
+.layerCtrl>button:hover{
+    background-color: var(--border);
+}
+.layerCtrl>div{
+    margin-left: 10px;
+}
+.layerCtrl>div>label{
+    font-size: 15px;
+    position: relative;
+    bottom: 2px;
+}
+#addLayer{
+    background-image: url("./img/icon/note_add.svg");
+    grid-column: 2;
+}
+#removeLayer{
+    background-image: url("./img/icon/delete.svg");
+    grid-column: 3;
+}
+#removeLayer:disabled{
+    background-color: var(--border) !important;
+}
+
+/* レイヤーアイテム */
+.layer_item{
+    height: 80px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+
+    display: grid;
+    grid-template-columns: 30px 1fr 20px;
+    grid-template-rows: 1fr 1fr;
+}
+.layer_item[data-selected=true]{
+    background-color: var(--layer-selected);
+}
+/* 可視性 */
+.borderInGrid{
+    grid-column: 1;
+    grid-row: 1/3;
+    border-right: 1px solid var(--border);
+}
+.visibilityLabel{
+    margin: auto;
+    grid-column: 1;
+    grid-row: 1/3;
+}
+.visibilityLabel>input{
+    display:none;
+}
+.visibilityLabel>div{
+    width: 20px;
+    height: 20px;
+    background: center;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    background-image: url("./img/icon/visibility_off.svg");
+    cursor: pointer;
+}
+
+.visibilityLabel>input[type=checkbox]:checked+div{
+    background-image: url("./img/icon/visibility.svg");
+}
+.LayerName{
+    margin-left: 10px;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.LayerName:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.LayerDetail{
+    margin-left: 10px;
+    grid-column: 2;
+    grid-row: 2;
+}
+.LayerColor{
+    grid-column: 3;
+    grid-row: 1/3;
+    overflow: hidden;
+}
+.LayerColor:hover{
+    cursor: pointer;
+}
+.LayerColor>input{
+    position: relative;
+    right: 40px;
+    visibility: hidden;
 }

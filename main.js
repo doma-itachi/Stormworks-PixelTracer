@@ -27,6 +27,7 @@ var informationElement;
 
 function setup(){
     core=new Core();//コア定義
+    
     autoTrace=new AutoTrace(core);
 
     //HTML操作
@@ -49,9 +50,16 @@ function setup(){
     document.querySelector("#clearButton").addEventListener("click", this.clearItems);
     document.querySelector("#resetButton").addEventListener("click", this.reset);
 
+    //レイヤー関連ボタン
+    document.querySelector("#addLayer").addEventListener("click", this.addLayer);
+    document.querySelector("#removeLayer").addEventListener("click", this.deleteLayer);
+
     //---
     document.querySelectorAll(".RefreshSrc").forEach(function (elm){
         elm.addEventListener("change", this.SetSource);
+    });
+    document.querySelectorAll(".RfrScrInBtn").forEach(function (elm){
+        elm.addEventListener("click", this.windowResized);
     });
 
     //ドラッグアンドドロップ
@@ -60,6 +68,8 @@ function setup(){
     elm.addEventListener("dragover",dragover, false);
     elm.addEventListener("drop",drop, false);
 
+    document.querySelector(".layerContainer").addEventListener("drop",drop_layer);
+    document.querySelector(".layerContainer").addEventListener("dragstart",dragStart_layer);
     //復帰
     storageMgr=new StorageManager();
     storageMgr.logElement=logElement;
@@ -70,16 +80,27 @@ function setup(){
 
     mouse=new Mouse();
 
-    windowResized();
+    //デバッグ
+    
     background("#333333");
 
     SetSource();
-}
 
+    windowResized();
+}
+window.onload=function(){windowResized();}
 function windowResized(){
     resizeCanvas(1,1);
+    
+    // let layerDiv=document.querySelector(".layerDiv");
+
+    // layerDiv.innerHTML="";
+    // //サイズを設定
+    // layerDiv.style.height=`auto`;
+
     var wrapperDiv=document.getElementById("wrapper");
     resizeCanvas(wrapperDiv.clientWidth,wrapperDiv.clientHeight);
+    // core.layerMgr.setToDOM();
 }
 function draw(){
     background("#262626");
@@ -115,6 +136,40 @@ function draw(){
                 line(0,YposS,width,YposS);
             }
 
+            
+
+            //四角形の描画(レイヤー)
+            for(let jn=0;jn<core.layerMgr.layers.length;jn++){
+                j=core.layerMgr.layers.length-1-jn;
+                if(core.layerMgr.layers[j].rects.length!=0 && core.layerMgr.layers[j].visible){
+                    push();
+                    if(core.isPreview){
+                        if(core.isUseFill){
+                            fill(core.isSetColor?core.layerMgr.layers[j].r:255,core.isSetColor?core.layerMgr.layers[j].g:255,core.isSetColor?core.layerMgr.layers[j].b:255);
+                            strokeWeight(0);
+                        }
+                        else{
+                            noFill();
+                            strokeWeight(5);
+                            stroke(core.isSetColor?core.layerMgr.layers[j].r:255,core.isSetColor?core.layerMgr.layers[j].g:255,core.isSetColor?core.layerMgr.layers[j].b:255);
+                        }
+                    }
+                    else{
+                        noFill();
+                        strokeWeight(5);
+                        stroke(0,0,255,255);
+                    }
+
+                    let path=core.layerMgr.layers[j].rects;
+                    for(let i=0;i<core.layerMgr.layers[j].rects.length;i++){
+                        rect(width/2+core.posX+path[i].x*core.zoom, height/2+core.posY+path[i].y*core.zoom,
+                            path[i].sx*core.zoom,path[i].sy*core.zoom);
+                    }
+                    pop();
+                }
+            
+            
+            }
             if(mouse.selecting){
                 push();
                 noFill();
@@ -124,18 +179,6 @@ function draw(){
                     height/2+core.posY+mouse.selectStartPixel.y*core.zoom,
                     (mouse.selectEndPixel.x+1-mouse.selectStartPixel.x)*core.zoom,
                     (mouse.selectEndPixel.y+1-mouse.selectStartPixel.y)*core.zoom);
-                pop();
-            }
-            
-            if(core.rects.length!=0){
-                push();
-                noFill();
-                strokeWeight(5);
-                stroke(0,0,255,255);
-                for(let i=0;i<core.rects.length;i++){
-                    rect(width/2+core.posX+core.rects[i].x*core.zoom, height/2+core.posY+core.rects[i].y*core.zoom,
-                        core.rects[i].sx*core.zoom,core.rects[i].sy*core.zoom);
-                }
                 pop();
             }
 
@@ -164,15 +207,33 @@ function draw(){
                 pop();
             }
             if(isAutoTrace){autoTraceAnimFrm=Math.min(1,autoTraceAnimFrm);autoTraceAnimFrm+=0.02}else{autoTraceAnimFrm=Math.max(0,autoTraceAnimFrm);autoTraceAnimFrm-=0.05;}
+            
         }
+
+        //オーバレイログ
+        if(overlayMsg.message!=null){
+            push();
+                fill(255,255,255);
+                textAlign(LEFT,TOP);
+                textSize(20);
+                strokeWeight(0);
+                text(overlayMsg.message,10,height-30*easeOutExpo(overlayMsg.frame));//0~30
+                
+            pop();
+            overlayMsg.update();
+        }
+
         setInfo();
     }
 }
 function keyPressed(){
     //もとに戻す
     if(keyIsDown(17) && keyIsDown(90)){
-        core.rects.pop();
-        SetSource();
+        if(core.layerMgr.selectedLayerIndex!=null){
+            core.layerMgr.layers[core.layerMgr.selectedLayerIndex].rects.pop();
+            core.layerMgr.setToDOM();
+            SetSource();
+        }
     }
 }
 function ImageSelected(file){//画像のロード
@@ -191,7 +252,22 @@ function ImageSelected(file){//画像のロード
             if(confirm("画像サイズが大きすぎます、読み込みますか？")==false)
                 return;
         }
-        core=new Core();
+
+        let isConfirm=false;
+        for(let i=0;i<core.layerMgr.layers.length;i++){
+            if(core.layerMgr.layers[i].rects.length!=0){
+                isConfirm=true;
+            }
+
+            if(isConfirm)break;
+        }
+        let result=false;
+        if(isConfirm)
+            result = confirm("変更が加えられています\n保持したまま読み込みますか？");
+        
+        if(!result)
+            core=new Core();
+
         core.imageData=file.data;
         core.loadImage();
         windowResized();
@@ -255,7 +331,8 @@ function mouseReleased(){
     if(mouse.selecting){
         if(0<=mouse.selectEndPixel.x && mouse.selectEndPixel.x<=core.image.width && 0<=mouse.selectEndPixel.y && mouse.selectEndPixel.y<=core.image.height
             && (mouse.selectEndPixel.x-mouse.selectStartPixel.x+1)!=0 && (mouse.selectEndPixel.y-mouse.selectStartPixel.y+1)!=0){
-            core.rects.push(new Rect(mouse.selectStartPixel.x,mouse.selectStartPixel.y,mouse.selectEndPixel.x-mouse.selectStartPixel.x+1,mouse.selectEndPixel.y-mouse.selectStartPixel.y+1));
+            // core.rects.push(new Rect(mouse.selectStartPixel.x,mouse.selectStartPixel.y,mouse.selectEndPixel.x-mouse.selectStartPixel.x+1,mouse.selectEndPixel.y-mouse.selectStartPixel.y+1));
+            core.addRect(mouse.selectStartPixel.x,mouse.selectStartPixel.y,mouse.selectEndPixel.x-mouse.selectStartPixel.x+1,mouse.selectEndPixel.y-mouse.selectStartPixel.y+1);
         }
         
         mouse.selecting=false;
@@ -299,6 +376,8 @@ function getSource(){
 
     chkbox=document.getElementById("isGenMiniCode");
     core.isGenMiniCode=chkbox.checked;
+
+    core.isPreview=document.getElementById("preview").checked;
     
     let source="--ソースコード";
 
@@ -306,14 +385,23 @@ function getSource(){
 
     if(core.isGenMiniCode)source+="\nfunction onDraw()";//関数はじめ
 
-    if(core.isSetColor && core.color!==null){
-        source+=`\nscreen.setColor(${core.isUseGamma?RGB.gammaFix(core.color.r):core.color.r},${core.isUseGamma?RGB.gammaFix(core.color.g):core.color.g},${core.isUseGamma?RGB.gammaFix(core.color.b):core.color.b})`;
-    }
-
     if(core.isUseFill)func="screen.drawRectF";
     else func="screen.drawRect";
-    for(let i=0;i<core.rects.length;i++){
-        source+=`\n${core.isGenMiniCode?"r":func}(${core.rects[i].x},${core.rects[i].y},${core.rects[i].sx},${core.rects[i].sy})`;
+
+    for(let l=0;l<core.layerMgr.layers.length;l++){
+        let ln=core.layerMgr.layers.length-1-l;
+
+        if(core.isSetColor && core.layerMgr.layers[ln].visible && core.layerMgr.layers[ln].rects.length!=0){
+            col=core.layerMgr.layers[ln];
+            source+=`\nscreen.setColor(${core.isUseGamma?RGB.gammaFix(col.r):col.r},${core.isUseGamma?RGB.gammaFix(col.g):col.g},${core.isUseGamma?RGB.gammaFix(col.b):col.b})`;
+        }
+        
+        if(core.layerMgr.layers[ln].visible){
+            for(let i=0;i<core.layerMgr.layers[ln].rects.length;i++){
+                let path=core.layerMgr.layers[ln].rects[i];
+                source+=`\n${core.isGenMiniCode?"r":func}(${path.x},${path.y},${path.sx},${path.sy})`;
+            }
+        }
     }
 
     if(core.isGenMiniCode)source+=`\nend`
@@ -323,7 +411,7 @@ function getSource(){
 }
 function copyToClipBoard(){
     navigator.clipboard.writeText(textAreaElement.value);
-    alert("コピーしました!");
+    overlayMsg.set("クリップボードにコピーしました");
 }
 function saveDat(){
     storageMgr.save();
@@ -334,8 +422,12 @@ function enableAutoTraceMode(){
 }
 
 function clearItems(){
-    core.rects=new Array();
+    if(core.layerMgr.selectedLayerIndex!=null){
+        overlayMsg.set(`${core.layerMgr.layers[core.layerMgr.selectedLayerIndex].rects.length}個のアイテムを消去しました。`)
+        core.layerMgr.layers[core.layerMgr.selectedLayerIndex].rects=new Array();
+    }
     SetSource();
+    core.layerMgr.setToDOM();
 }
 
 function reset(){
@@ -355,14 +447,196 @@ let foo=null;
 function drop(e){
     e.stopPropagation();
     e.preventDefault();
+    if(e.dataTransfer.files.length!=0){
+        //fileReader
+        let fileReader=new FileReader();
+        fileReader.readAsDataURL(e.dataTransfer.files[0]);
+        foo=new p5.File(e.dataTransfer.files[0]);
+        fileReader.onload=function(event){
+            foo.data=event.target.result;
+            ImageSelected(foo);
+        }
+    }
+}
+function dragStart_layer(e){
+    e.dataTransfer.setData("text/plain", e.target.id);
+}
+function drop_layer(e){
+    // e.preventDefault();
+    if(e.target.id==""){
+        let element = e.target;
+        while(element.id==""){
+            element=element.parentNode;
+        }
+        core.layerMgr.moveAt(e.dataTransfer.getData("text"),element.id);
+    }
+    else if(e.target.id=="layerContainer"){
+        core.layerMgr.moveAt(e.dataTransfer.getData("text"),core.layerMgr.layers.length-1);
+    }
+    else{
+        core.layerMgr.moveAt(e.dataTransfer.getData("text"),e.target.id);
+    }
+}
 
-    //fileReader
-    let fileReader=new FileReader();
-    fileReader.readAsDataURL(e.dataTransfer.files[0]);
-    foo=new p5.File(e.dataTransfer.files[0]);
-    fileReader.onload=function(event){
-        foo.data=event.target.result;
-        ImageSelected(foo);
+//レイヤー
+function addLayer(){
+    core.layerMgr.addLayer();
+}
+function deleteLayer(){
+    overlayMsg.set(`レイヤー"${core.layerMgr.layers[core.layerMgr.selectedLayerIndex].name}"を削除しました`)
+    core.layerMgr.deleteLayer();
+    
+}
+
+class overlayMsg{
+    static show=false;
+    static message=null;
+    static frame=0;
+    static increase=true;
+    static speed=0.03;
+    static lifeTime=5;
+
+    static set(_message){
+        this.show=true;
+        this.frame=0;
+        this.increase=true;
+        this.message=_message;
+    }
+    static update(){
+        if(this.show){
+            if(this.increase)
+                this.frame+=this.speed;
+            else
+                this.frame-=this.speed;
+
+            if(this.increase==false && this.frame<=0){
+                this.frame=0;
+                this.message=null;
+                this.show=false;
+            }
+            
+            if(this.frame>=this.lifeTime){
+                this.frame=1;
+                this.increase=false;
+            }
+        }
+    }
+}
+
+class LayerMgr{
+    constructor(){
+        this.layers=new Array();
+        this.selectedLayerIndex=null;
+
+        //一時
+        this.layerName=null;
+        this.objectTotal=null;
+        this.objhex=null;
+    }
+    addLayer(){
+        // this.layers.push(new Layer());
+        this.layers.splice(this.selectedLayerIndex,0,new Layer());
+            // if(this.selectedLayerIndex==null)this.selectedLayerIndex=this.layers.length;
+        this.setToDOM();
+        if(this.selectedLayerIndex==null)
+        this.select(0);
+            // this.select(this.selectedLayerIndex);
+        // else
+        //     this.select(0);
+    }
+    deleteLayer(){
+        if(core.layerMgr.selectedLayerIndex!=null){
+            this.layers.splice(this.selectedLayerIndex, 1);
+            this.selectedLayerIndex=null;
+            this.setToDOM();
+            SetSource();
+        }
+    }
+    moveAt(index, at) {
+        if (index === at || index > this.layers.length -1 || at > this.layers.length - 1) {
+          return;
+        }
+        at=parseInt(at);
+        
+        if(index<at){
+            this.layers.splice(at+1,0,this.layers[index]);
+            this.layers.splice(index,1);
+        }
+        else{
+            let temp=this.layers[index];
+            this.layers.splice(index,1);
+            this.layers.splice(at,0,temp);
+        }
+
+        this.setToDOM();
+    }
+    setToDOM(){
+        let layerDiv=document.querySelector(".layerContainer");
+
+        layerDiv.innerHTML="";
+
+        for(let i=0;i<this.layers.length;i++){
+            this.layerName=this.layers[i].name;
+            this.objectTotal=this.layers[i].rects.length;
+            this.objhex=this.layers[i].getHex();
+
+            layerDiv.innerHTML+=`<div class="layer_item" id="${i}" ${i==this.selectedLayerIndex ? 'data-selected="true"' : ""} draggable="true">
+            <div class="borderInGrid"></div>
+            <label class="visibilityLabel" title="表示・非表示">
+                <input type="checkbox" class="visibleChk" ${this.layers[i].visible?"checked":""}>
+                <div></div>
+            </label>
+            <p class="LayerName NotSelectable" title="レイヤー名を変更...">${this.layerName}</p>
+            <div class="LayerDetail">
+                <p class="NotSelectable">${this.objectTotal}アイテム</p>
+            </div>
+            <label class="LayerColor" style="background-color: ${this.objhex};" title="色を変更...">
+            <input type="color" class="LayerColorPicker">
+            </label>
+            </div>`;
+
+            // SetSource();
+            //もし選択されていたら、属性を付与する
+        }
+
+        //レイヤー選択のイベント登録
+        let elm=document.querySelectorAll(".layer_item");
+
+        elm.forEach(value=>{value.addEventListener("click",e=>{
+            if(e.target.classList.contains("LayerName")){
+                let result = prompt("レイヤー名を指定");
+                if(result && result.match(/\S/g)){
+                    // this.layers[this.selectedLayerIndex].name=result;
+                    this.layers[e.target.parentNode.id].name=result;
+                    this.setToDOM();
+                }
+            }
+            if(e.target.classList.contains("visibleChk")){
+                this.layers[this.selectedLayerIndex].visible=e.target.checked;
+                SetSource();
+            }
+            this.select(e.currentTarget.id);
+        });});
+
+        let picker=document.querySelectorAll(".LayerColorPicker");
+        picker.forEach(value=>{
+            value.addEventListener("input",e=>{
+                this.layers[e.currentTarget.parentNode.parentNode.id].setColorFromHex(e.target.value);
+                e.currentTarget.parentNode.style=`background-color: ${e.target.value};`;
+                SetSource();
+            });
+        });
+    }
+    select(Index){
+        // console.log(`${Index}が選択されました`);
+
+        if(this.selectedLayerIndex!==null)document.querySelectorAll(".layer_item")[this.selectedLayerIndex].dataset.selected=false;
+        this.selectedLayerIndex=Index;
+        document.querySelectorAll(".layer_item")[Index].dataset.selected=true;
+
+        //仮置き selectedLayerIndex==nullだったらボタンをdisabledにする
+        if(this.selectedLayerIndex==null)document.querySelector("#removeLayer").disabled=true;
+        else document.querySelector("#removeLayer").disabled=false;
     }
 }
 
@@ -374,20 +648,40 @@ class Core{
         this.imageData=null;
         this.zoom=1;
 
-        this.color=null;
+        // this.color=null;
 
         this.isUseFill=true;
         this.isSetColor=true;
         this.isUseGamma=false;
         this.isGenMiniCode=false;
+        this.isPreview=false;
 
+
+        // this.Layers=new Array();
+        this.layerMgr=new LayerMgr();
         this.rects=new Array();
+
+        // core.layerMgr.addLayer();
+        this.layerMgr.addLayer();
     }
     loadImage(){
         core.image=loadImage(this.imageData,"");
         this.color=null;
         // core.image.hide();
         SetSource();
+    }
+
+    addRect(x, y, sx, sy){
+        if(this.layerMgr.selectedLayerIndex!=null)this.layerMgr.layers[this.layerMgr.selectedLayerIndex].rects.push(new Rect(x, y, sx, sy));
+        else{
+            if(this.layerMgr.layers.length==0)overlayMsg.set("レイヤーがありません。レイヤーを新規作成してください");
+            else overlayMsg.set("レイヤーが選択されていません");
+        }
+
+        this.layerMgr.setToDOM();//パフォーマンス落ちる可能性あり
+    }
+    cleanUp(){
+
     }
     positionClamp(){
     }
@@ -456,7 +750,11 @@ class AutoTrace{
 
     init(img, r,g,b){
         //色をセット
-        core.color=new RGB(r,g,b);
+        // core.color=new RGB(r,g,b);
+        let path=core.layerMgr.layers[core.layerMgr.selectedLayerIndex];
+        path.r=r;
+        path.g=g;
+        path.b=b;
 
         //画像の選択範囲を解析
         this.image=img;
@@ -549,7 +847,8 @@ class AutoTrace{
                     sy=syV;
                 }
 
-                core.rects.push(new Rect(origin[1]-1,origin[0]-1,sx,sy));
+                // core.rects.push(new Rect(origin[1]-1,origin[0]-1,sx,sy));
+                core.addRect(origin[1]-1,origin[0]-1,sx,sy);
                 //this.mapsに選択範囲を適用（1未選択→2選択済み）
                 for(let _sy=0;_sy<sy;_sy++){
                     for(let _sx=0;_sx<sx;_sx++){
@@ -558,6 +857,7 @@ class AutoTrace{
                 }
             }
         }
+        overlayMsg.set("自動トレース->完了")
         SetSource();
     }
 }
@@ -587,3 +887,23 @@ class RGB{
 function easeOutExpo(x){
     return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
     }
+
+class Layer{
+    constructor(){
+        this.name="新規レイヤー";
+        this.id=null;
+        this.rects=new Array();
+        this.r=255;
+        this.g=255;
+        this.b=255;
+        this.visible=true;
+    }
+    setColorFromHex(hex){
+        this.r=parseInt(hex.slice(1,3),16);
+        this.g=parseInt(hex.slice(3,5),16);
+        this.b=parseInt(hex.slice(5,7),16);
+    }
+    getHex(){
+        return `#${hex(this.r,2)}${hex(this.g,2)}${hex(this.b,2)}`;
+    }
+}
