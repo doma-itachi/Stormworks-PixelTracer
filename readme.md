@@ -41,6 +41,6 @@ Photoshopを使う場合はアンチエイリアスを"なし"に設定するの
 - [M+ビットマップフォント](https://mplus-fonts.osdn.jp/mplus-bitmap-fonts/ "MplusBitmap")
 
 ## ライセンス - License
-Copyright (c) 2022 doma-itachi  
+Copyright (c) 2022 土間いたち  
 "Stormworks PixelTracer"はMITライセンスの下で公開されています。  
 また、このツールの使用に伴うクレジットの表示、開発者への報告は必要ありません。(ワークショップや動画の概要欄に、このツールを使用した旨を表記する必要はありません)
