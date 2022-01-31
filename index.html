@@ -77,7 +77,7 @@
 
                             <tr>
                                 <td></td>
-                                <td> <button id="clearButton">選択範囲をすべて削除</button> </td>
+                                <td> <button id="clearButton">選択レイヤの選択範囲をすべて削除</button> </td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -91,10 +91,6 @@
                                 <td></td>
                                 <td class="Author"> Twitter: <a href="https://twitter.com/itachi_yukari" target="_blank">@itachi_yukari</a> </td>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td class="Author">バグ報告＆要望はDMまで</td>
-                            </tr>
                         </table>
                     </div>
                 </div>
@@ -107,9 +103,13 @@
                     <input type="radio" class="tab-input" id="tab_layer" name="layerTab" checked>
                     <label for="tab_layer" class="tab-item NotSelectable">レイヤー</label>
                     <div class="tab-content layerTabHeight">
-                        <div class="layerContainer">
+                        <div class="layerContainer" id="layerContainer">
                         </div>
                         <div class="layerCtrl">
+                            <div>
+                                <input id="preview" type="checkbox" class="RefreshSrc">
+                                <label for="preview" class="NotSelectable">プレビュー</label>
+                            </div>
                             <button id="addLayer" title="レイヤーを追加"></button>
                             <button id="removeLayer" title="レイヤーを削除"></button>
                         </div>
