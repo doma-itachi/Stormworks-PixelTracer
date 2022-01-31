@@ -1,6 +1,14 @@
+<p align="center">
+<img width="700" src="https://user-images.githubusercontent.com/94786908/151834828-1a82bd43-f3bd-403b-afb8-1c6c0ca9db44.png"></img>
+</p>
+
 # Stormworks PixelTracer
 ドット画像から文字などを自動で抽出し、ゲーム「Stormworks: Build and Rescue」内のモニター用のluaコードを生成するツールです。(ブラウザで動作)  
 A tool can generate luaCode from an image for display on the monitor in "Stormworks Build And Rescue".
+
+<p align="center">
+  <img width="900" src="https://user-images.githubusercontent.com/94786908/151832464-d8d16ad6-ad79-4e0a-a749-f35d35222fad.gif">
+</p>
 
 ## 簡単な使い方 - How to use
 1. 任意の画像エディタでモニターに表示させたい画像を作成(サイズはゲーム内モニターの解像度、32x32の倍数)
@@ -28,13 +36,9 @@ A tool can generate luaCode from an image for display on the monitor in "Stormwo
 - 軽微なUIの変更
 
 ## おすすめフォント
+Photoshopを使う場合はアンチエイリアスを"なし"に設定するのがおすすめ！
 - [KHドットフォントシリーズ](http://jikasei.me/font/kh-dotfont/ "KHdotFont")  
 - [M+ビットマップフォント](https://mplus-fonts.osdn.jp/mplus-bitmap-fonts/ "MplusBitmap")
-
-## デモ - Demo
-https://user-images.githubusercontent.com/94786908/143872064-ca8b158d-3097-4e79-8b8d-2e7779d5fc03.mp4
-
-## 既知のバグ
 
 ## ライセンス - License
 Copyright (c) 2022 doma-itachi  
