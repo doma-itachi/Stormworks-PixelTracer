@@ -91,16 +91,9 @@ function setup(){
 window.onload=function(){windowResized();}
 function windowResized(){
     resizeCanvas(1,1);
-    
-    // let layerDiv=document.querySelector(".layerDiv");
-
-    // layerDiv.innerHTML="";
-    // //サイズを設定
-    // layerDiv.style.height=`auto`;
 
     var wrapperDiv=document.getElementById("wrapper");
     resizeCanvas(wrapperDiv.clientWidth,wrapperDiv.clientHeight);
-    // core.layerMgr.setToDOM();
 }
 function draw(){
     background("#262626");
@@ -237,7 +230,7 @@ function keyPressed(){
     }
 }
 function ImageSelected(file){//画像のロード
-    console.log(file);
+    // console.log(file);
 
     if(file.type==="image"){
         temp=createImg(file.data,"","",async()=>{
@@ -318,8 +311,6 @@ function mouseDragged(){
         else mouse.selectEndPixel.x=Math.floor(rawX+1);
         if(mouse.selectStartPixel.y<=mouse.selectEndPixel.y)mouse.selectEndPixel.y=Math.floor(rawY);
         else mouse.selectEndPixel.y=Math.floor(rawY+1);
-        // mouse.selectEndPixel.x=Math.floor((mouseX-(width/2+core.posX))/core.zoom);
-        // mouse.selectEndPixel.y=Math.floor((mouseY-(height/2+core.posY))/core.zoom);
     }
     if(mouse.dragging){
         core.posX=mouseX-mouse.mouseStart.x;
@@ -331,7 +322,6 @@ function mouseReleased(){
     if(mouse.selecting){
         if(0<=mouse.selectEndPixel.x && mouse.selectEndPixel.x<=core.image.width && 0<=mouse.selectEndPixel.y && mouse.selectEndPixel.y<=core.image.height
             && (mouse.selectEndPixel.x-mouse.selectStartPixel.x+1)!=0 && (mouse.selectEndPixel.y-mouse.selectStartPixel.y+1)!=0){
-            // core.rects.push(new Rect(mouse.selectStartPixel.x,mouse.selectStartPixel.y,mouse.selectEndPixel.x-mouse.selectStartPixel.x+1,mouse.selectEndPixel.y-mouse.selectStartPixel.y+1));
             core.addRect(mouse.selectStartPixel.x,mouse.selectStartPixel.y,mouse.selectEndPixel.x-mouse.selectStartPixel.x+1,mouse.selectEndPixel.y-mouse.selectStartPixel.y+1);
         }
         
@@ -880,7 +870,7 @@ class RGB{
         this.b=_b;
     }
     static gammaFix(c){
-        return c^2.2/255^2.2*c
+        return Math.round((c^2.2)/(255^2.2)*c);
     }
 }
 
