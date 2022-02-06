@@ -2,7 +2,8 @@
 <img width="700" src="https://user-images.githubusercontent.com/94786908/151834828-1a82bd43-f3bd-403b-afb8-1c6c0ca9db44.png"></img>
 </p>
 
-# Stormworks PixelTracer
+---
+
 ドット画像から文字などを自動で抽出し、ゲーム「Stormworks: Build and Rescue」内のモニター用のluaコードを生成するツールです。(ブラウザで動作)  
 A tool can generate luaCode from an image for display on the monitor in "Stormworks Build And Rescue".
 
@@ -17,6 +18,11 @@ A tool can generate luaCode from an image for display on the monitor in "Stormwo
 
 ## リンク - Links
 [Stormworks PixelTracer](https://doma-itachi.github.io/Stormworks-PixelTracer/ "Stormworks PixelTracer")
+
+## おすすめフォント
+Photoshopを使う場合はアンチエイリアスを"なし"に設定するのがおすすめ！
+- [KHドットフォントシリーズ](http://jikasei.me/font/kh-dotfont/ "KHdotFont")  
+- [M+ビットマップフォント](https://mplus-fonts.osdn.jp/mplus-bitmap-fonts/ "MplusBitmap")
 
 ## アップデート内容 - Updates
 ### v2.0
@@ -35,10 +41,15 @@ A tool can generate luaCode from an image for display on the monitor in "Stormwo
 - コード最適化(最小化)機能追加
 - 軽微なUIの変更
 
-## おすすめフォント
-Photoshopを使う場合はアンチエイリアスを"なし"に設定するのがおすすめ！
-- [KHドットフォントシリーズ](http://jikasei.me/font/kh-dotfont/ "KHdotFont")  
-- [M+ビットマップフォント](https://mplus-fonts.osdn.jp/mplus-bitmap-fonts/ "MplusBitmap")
+## 寄稿 - Contribute
+このリポジトリをForkして、変更を加えてからプルリクエストを送信してください
+
+## 作成者 - Author
+土間いたち [@itachi_yukari](https://twitter.com/itachi_yukari)  
+バグ報告や要望等はDMまでお願いします
+
+## 参考文献
+[Lua RGB Color Collection](https://steamcommunity.com/sharedfiles/filedetails/?id=2273112890)
 
 ## ライセンス - License
 Copyright (c) 2022 土間いたち  
