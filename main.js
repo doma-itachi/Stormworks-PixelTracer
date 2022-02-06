@@ -581,7 +581,7 @@ class LayerMgr{
                 <p class="NotSelectable">${this.objectTotal}アイテム</p>
             </div>
             <label class="LayerColor" style="background-color: ${this.objhex};" title="色を変更...">
-            <input type="color" class="LayerColorPicker">
+            <input type="color" class="LayerColorPicker" value="${this.objhex}">
             </label>
             </div>`;
 
