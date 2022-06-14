@@ -364,6 +364,7 @@ a:visited{
     width: 24px;
     height: 24px;
     border-radius: 4px;
+    background-color: inherit;
     margin: auto;
     line-height: 23px;
     text-align: center;
