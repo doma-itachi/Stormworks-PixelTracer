@@ -328,6 +328,8 @@ a:visited{
 }
 .LayerDetail{
     margin-left: 10px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
     grid-column: 2;
     grid-row: 2;
 }
@@ -343,4 +345,29 @@ a:visited{
     position: relative;
     right: 40px;
     visibility: hidden;
+}
+.LayerStgChk{
+    display: none;
+}
+
+.LayerSetting{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.LayerSetting>label{
+    margin: auto;
+}
+.LayerSetting>label>input:checked+div{
+    background-color: var(--border);
+}
+.LayerSetting>label>div{
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    margin: auto;
+    line-height: 23px;
+    text-align: center;
+}
+.LayerSetting>label:hover>div{
+    background-color: var(--layerCtrl-back);
 }

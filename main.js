@@ -389,7 +389,7 @@ function getSource(){
         if(core.layerMgr.layers[ln].visible){
             for(let i=0;i<core.layerMgr.layers[ln].rects.length;i++){
                 let path=core.layerMgr.layers[ln].rects[i];
-                source+=`\n${core.isGenMiniCode?"r":func}(${path.x},${path.y},${path.sx},${path.sy})`;
+                source+=`\n${core.isGenMiniCode?"r":func}(${path.x}${core.layerMgr.layers[ln].addOffsetX?"+x":""},${path.y}${core.layerMgr.layers[ln].addOffsetY?"+y":""},${path.sx},${path.sy})`;
             }
         }
     }
@@ -569,6 +569,8 @@ class LayerMgr{
             this.layerName=this.layers[i].name;
             this.objectTotal=this.layers[i].rects.length;
             this.objhex=this.layers[i].getHex();
+            this.isOffsetX=this.layers[i].addOffsetX;
+            this.isOffsetY=this.layers[i].addOffsetY;
 
             layerDiv.innerHTML+=`<div class="layer_item" id="${i}" ${i==this.selectedLayerIndex ? 'data-selected="true"' : ""} draggable="true">
             <div class="borderInGrid"></div>
@@ -579,6 +581,16 @@ class LayerMgr{
             <p class="LayerName NotSelectable" title="レイヤー名を変更...">${this.layerName}</p>
             <div class="LayerDetail">
                 <p class="NotSelectable">${this.objectTotal}アイテム</p>
+                <div class="LayerSetting">
+                    <label>
+                        <input type="checkbox" class="LayerStgChk X" ${this.isOffsetX?"checked":""}></input>
+                        <div title="X軸のオフセット">X</div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="LayerStgChk Y" ${this.isOffsetY?"checked":""}></input>
+                        <div title="X軸のオフセット">Y</div>
+                    </label>
+                </div>
             </div>
             <label class="LayerColor" style="background-color: ${this.objhex};" title="色を変更...">
             <input type="color" class="LayerColorPicker" value="${this.objhex}">
@@ -604,6 +616,16 @@ class LayerMgr{
             if(e.target.classList.contains("visibleChk")){
                 this.layers[this.selectedLayerIndex].visible=e.target.checked;
                 SetSource();
+            }
+            if(e.target.classList.contains("LayerStgChk")){
+                if(e.target.classList.contains("X")){
+                    this.layers[this.selectedLayerIndex].addOffsetX=e.target.checked;
+                }
+                if(e.target.classList.contains("Y")){
+                    this.layers[this.selectedLayerIndex].addOffsetY=e.target.checked;
+                }
+                SetSource();
+                this.setToDOM();
             }
             this.select(e.currentTarget.id);
         });});
@@ -887,6 +909,8 @@ class Layer{
         this.g=255;
         this.b=255;
         this.visible=true;
+        this.addOffsetX=false;
+        this.addOffsetY=false;
     }
     setColorFromHex(hex){
         this.r=parseInt(hex.slice(1,3),16);
