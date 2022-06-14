@@ -369,7 +369,7 @@ function getSource(){
 
     core.isPreview=document.getElementById("preview").checked;
     
-    let source="--ソースコード";
+    let source="--code";
 
     let func;
 
@@ -380,6 +380,8 @@ function getSource(){
 
     for(let l=0;l<core.layerMgr.layers.length;l++){
         let ln=core.layerMgr.layers.length-1-l;
+
+        source+="\n--"+core.layerMgr.layers[ln].name;
 
         if(core.isSetColor && core.layerMgr.layers[ln].visible && core.layerMgr.layers[ln].rects.length!=0){
             col=core.layerMgr.layers[ln];
@@ -610,6 +612,7 @@ class LayerMgr{
                 if(result && result.match(/\S/g)){
                     // this.layers[this.selectedLayerIndex].name=result;
                     this.layers[e.target.parentNode.id].name=result;
+                    SetSource();
                     this.setToDOM();
                 }
             }
