@@ -333,10 +333,14 @@ function mouseReleased(){
 }
 function zoom(event){
     if(event.deltaY!=0 && core.image!==null){
-        if(event.deltaY>0)
+        console.log(mouseX+","+mouseY);
+        core.image.width*core.zoom
+        if(event.deltaY>0){
             core.zoom-=2;
-        else
+        }
+        else{
             core.zoom+=2;
+        }
         core.zoom=Math.min(100,Math.max(1,core.zoom));
     }
 }
@@ -396,7 +400,7 @@ function getSource(){
         }
     }
 
-    if(core.isGenMiniCode)source+=`\nend`
+    if(core.isGenMiniCode)source+=`\nend`;
 
     if(core.isGenMiniCode)source+=`\nfunction r(x,y,sx,sy)\n    ${func}(x,y,sx,sy)\nend`;
     return source;
@@ -598,9 +602,6 @@ class LayerMgr{
             <input type="color" class="LayerColorPicker" value="${this.objhex}">
             </label>
             </div>`;
-
-            // SetSource();
-            //もし選択されていたら、属性を付与する
         }
 
         //レイヤー選択のイベント登録
